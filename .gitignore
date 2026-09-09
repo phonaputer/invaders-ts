@@ -1,0 +1,6 @@
+# Compiled / bundled output
+/dist
+
+# Dependency cache
+/node_modules
+

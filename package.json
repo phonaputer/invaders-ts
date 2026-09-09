@@ -1,0 +1,26 @@
+{
+  "name": "invaders",
+  "version": "0.0.1",
+  "description": "Reimplementation of the Taito classic just for fun. This time using HTML5 canvas.",
+  "homepage": "https://github.com/phonaputer/invaders-ts#readme",
+  "bugs": {
+    "url": "https://github.com/phonaputer/invaders-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phonaputer/invaders-ts.git"
+  },
+  "license": "ISC",
+  "author": "phonaputer",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "check": "npx tsc --noemit",
+    "debug": "node ./scripts/esbuild-debug.mjs",
+    "test": "echo \"Coming soon...\" && exit 1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}
