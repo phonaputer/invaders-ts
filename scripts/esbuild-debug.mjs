@@ -2,7 +2,7 @@ import * as esbuild from "esbuild";
 
 const ctx = await esbuild
   .context({
-    entryPoints: ["src/main.ts", "src/index.html"],
+    entryPoints: ["src/main.ts", "src/index.html", "src/style.css"],
     bundle: true,
     format: "esm",
     outdir: "dist",
@@ -10,7 +10,8 @@ const ctx = await esbuild
     minify: false,
     assetNames: "assets/[name]-[hash]",
     loader: {
-      ".html": "copy",
+      ".css": "css",
+      ".html": "copy", // TODO find out if there's a good plugin to allow having the HTML file be the only entrypoint
       ".ts": "ts",
     },
   })
