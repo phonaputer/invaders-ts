@@ -14,13 +14,15 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
-    "check": "npx tsc --noemit",
+    "check": "tsc --noemit && oxlint",
     "dev": "vite",
+    "lint:fix": "oxlint --fix",
     "preview": "vite preview",
     "test": "echo \"Coming soon...\" && exit 1"
   },
   "devDependencies": {
     "@types/node": "^22.20.2",
+    "oxlint": "^1.82.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"
   },
