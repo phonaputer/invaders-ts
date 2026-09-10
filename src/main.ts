@@ -1,4 +1,5 @@
 import "./style.css";
+import spaceInvadersSpritesheet from "./assets/space_invaders.png";
 
 window.addEventListener("load", () => {
   const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
@@ -8,8 +9,13 @@ window.addEventListener("load", () => {
 
   ctx = canvas.getContext("2d")!;
 
+  spriteSheetImage = new Image();
+  spriteSheetImage.src = spaceInvadersSpritesheet;
+
   requestAnimationFrame(animate);
 });
+
+var spriteSheetImage: HTMLImageElement;
 
 const CANVAS_WIDTH = 448;
 const CANVAS_HEIGHT = 567;
@@ -45,8 +51,19 @@ function animate(timestampMs: number) {
   }
 
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.fillStyle = "red";
-  ctx.fillRect(SQUARE_X, squareY, SQUARE_WH, SQUARE_WH);
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    spriteSheetImage,
+    16,
+    0,
+    16,
+    16,
+    SQUARE_X,
+    squareY,
+    SQUARE_WH,
+    SQUARE_WH,
+  );
 
   requestAnimationFrame(animate);
 }
