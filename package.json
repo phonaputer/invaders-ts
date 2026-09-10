@@ -14,8 +14,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
-    "check": "tsc --noemit && oxlint",
     "dev": "vite",
+    "lint": "tsc --noemit && oxlint",
     "lint:fix": "oxlint --fix",
     "preview": "vite preview",
     "test": "echo \"Coming soon...\" && exit 1"

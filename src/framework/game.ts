@@ -1,6 +1,6 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@src/framework/constants";
 import type { SceneInitializationCallback } from "@src/framework/scene";
-import { SceneHarness } from "@src/framework/scene_harness";
+import { SceneHarness } from "@src/framework/scene-harness";
 
 export class Game {
   private canvas?: HTMLCanvasElement;

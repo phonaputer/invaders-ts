@@ -6,7 +6,14 @@
     "suspicious": "warn",
     "style": "warn"
   },
-  "rules": {},
+  "rules": {
+    "eslint/no-magic-numbers": "off", // Gonna have quite a few of these in the component setup logic.
+    "eslint/id-length": "off", // I actually don't mind short names. Also this catches `for (let i = 0`...
+    "eslint/one-var": "off", // Sometimes I'm grouping constants separately for a reason.
+    "eslint/sort-imports": "off", // My idea of sorted (alphabetical) and ESLint's idea of sorted are apparently different.
+
+    "typescript/prefer-for-of": "off" // For-of is slower and this is a 60fps game so I care about that.
+  },
   "env": {
     "builtin": true
   }

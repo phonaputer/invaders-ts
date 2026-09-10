@@ -1,20 +1,20 @@
 import {
-  MS_PER_TICK,
-  CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  MS_PER_TICK,
 } from "@src/framework/constants";
-import type { TickSystem } from "@src/framework/tick_system";
-import type { RenderSystem } from "@src/framework/render_system";
+import type { RenderSystem } from "@src/framework/render-system";
 import type { SceneInitializationCallback } from "@src/framework/scene";
-import { createWorld, type World } from "bitecs";
+import type { TickSystem } from "@src/framework/tick-system";
+import { type World, createWorld } from "bitecs";
 
 export class SceneHarness {
   private tickSystems: TickSystem[] = [];
   private renderSystems: RenderSystem[] = [];
   private readonly world: World;
 
-  private previousFrameMs: number = 0;
-  private untickedMs: number = 0;
+  private previousFrameMs = 0;
+  private untickedMs = 0;
 
   constructor(initializeScene: SceneInitializationCallback) {
     this.world = createWorld();
