@@ -20,7 +20,11 @@
     "test": "echo \"Coming soon...\" && exit 1"
   },
   "devDependencies": {
+    "@types/node": "^22.20.2",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "bitecs": "^0.4.0"
   }
 }
