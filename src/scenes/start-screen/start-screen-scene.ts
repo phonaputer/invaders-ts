@@ -1,21 +1,33 @@
 import type { RenderCtx } from "@src/framework/render-system";
 import type Renderer from "@src/framework/renderer";
 import type { InitializeCtx } from "@src/framework/scene";
+import type { TickCtx } from "@src/framework/tick-system";
+import { Input } from "@src/framework/user-input";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
+import { initializeTestScene } from "@src/scenes/test-scene";
 
-import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
+import spriteSheetSrc from "@src/assets/space_invaders.png";
 
-var spriteSheetImage: HTMLImageElement | undefined = undefined;
+const SPACE_TO_SCENE_SWAP_MS = 750;
+let spaceEngagedTime = 0;
+
+const BLINK_MS = 50;
+let isBlinkingTextVisible = true;
+let lastBlinkMs = 0;
+let blinkEngaged = false;
 
 interface TextRenderer {
   renderTextCentered: (renderer: Renderer, y: number, text: string) => void;
 }
 
 class RenderSystem {
-  constructor(
-    private readonly textRenderer: TextRenderer,
-    private readonly spriteSheetImage: HTMLImageElement,
-  ) {}
+  private readonly textRenderer: TextRenderer;
+  private readonly spriteSheetImage: HTMLImageElement;
+
+  constructor(textRenderer: TextRenderer, spriteSheetImage: HTMLImageElement) {
+    this.textRenderer = textRenderer;
+    this.spriteSheetImage = spriteSheetImage;
+  }
 
   render(ctx: RenderCtx): void {
     this.textRenderer.renderTextCentered(ctx.renderer, 60, "personal space invaders");
@@ -38,15 +50,38 @@ class RenderSystem {
     this.textRenderer.renderTextCentered(ctx.renderer, 180, "<a> and <d> to move");
     this.textRenderer.renderTextCentered(ctx.renderer, 190, "<space> to shoot");
 
-    this.textRenderer.renderTextCentered(ctx.renderer, 220, "press <space> to begin");
+    if (isBlinkingTextVisible) {
+      this.textRenderer.renderTextCentered(ctx.renderer, 220, "press <space> to begin");
+    }
+  }
+}
+
+class TickSystem {
+  tick(ctx: TickCtx): void {
+    if (blinkEngaged) {
+      if (ctx.currentMs > lastBlinkMs + BLINK_MS) {
+        lastBlinkMs = ctx.currentMs;
+        isBlinkingTextVisible = !isBlinkingTextVisible;
+      }
+
+      if (ctx.currentMs > spaceEngagedTime + SPACE_TO_SCENE_SWAP_MS) {
+        ctx.sceneSetter.setScene(initializeTestScene);
+      }
+    } else {
+      if (ctx.userInput.initiated(Input.Fire)) {
+        blinkEngaged = true;
+        spaceEngagedTime = ctx.currentMs;
+      }
+    }
   }
 }
 
 const initializeStartScreenScene = (ctx: InitializeCtx): void => {
-  spriteSheetImage = new Image();
-  spriteSheetImage.src = spaceInvadersSpritesheet;
+  const spriteSheetImage = new Image();
+  spriteSheetImage.src = spriteSheetSrc;
 
   ctx.systemRegistry.registerRenderSystem(new RenderSystem(new SpriteTextRenderer(spriteSheetImage), spriteSheetImage));
+  ctx.systemRegistry.registerTickSystem(new TickSystem());
 };
 
 export default initializeStartScreenScene;

@@ -2,19 +2,23 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH, MS_PER_TICK } from "@src/framework/constan
 import type { RenderSystem } from "@src/framework/render-system";
 import type Renderer from "@src/framework/renderer";
 import type { SceneInitializationCallback } from "@src/framework/scene";
+import type SceneSetter from "@src/framework/scene-setter";
 import type { TickSystem } from "@src/framework/tick-system";
+import { BrowserInputWatcher } from "@src/framework/user-input";
 import { type World, createWorld } from "bitecs";
 
 export class SceneHarness {
   private tickSystems: TickSystem[] = [];
   private renderSystems: RenderSystem[] = [];
   private readonly world: World;
+  private readonly userInput: BrowserInputWatcher;
 
   private previousFrameMs = 0;
   private untickedMs = 0;
 
   constructor(initializeScene: SceneInitializationCallback) {
     this.world = createWorld();
+    this.userInput = new BrowserInputWatcher();
 
     initializeScene({
       systemRegistry: this,
@@ -22,27 +26,31 @@ export class SceneHarness {
     });
   }
 
-  frame(renderer: Renderer, currentMs: number): void {
+  frame(sceneSetter: SceneSetter, renderer: Renderer, currentMs: number): void {
     const elapsedMs = currentMs - this.previousFrameMs;
     this.previousFrameMs = currentMs;
     this.untickedMs += elapsedMs;
+
+    this.userInput.recordInput();
 
     while (this.untickedMs >= MS_PER_TICK) {
       this.untickedMs -= MS_PER_TICK;
       const thisTickAbsoluteMs = currentMs - this.untickedMs;
 
-      this.tick(MS_PER_TICK, thisTickAbsoluteMs);
+      this.tick(sceneSetter, MS_PER_TICK, thisTickAbsoluteMs);
     }
 
     this.render(renderer);
   }
 
-  private tick(deltaMs: number, currentMs: number): void {
+  private tick(sceneSetter: SceneSetter, deltaMs: number, currentMs: number): void {
     for (let i = 0; i < this.tickSystems.length; i++) {
       this.tickSystems[i]!.tick({
-        world: this.world,
-        deltaMs,
         currentMs,
+        deltaMs,
+        sceneSetter,
+        userInput: this.userInput,
+        world: this.world,
       });
     }
   }
@@ -52,7 +60,7 @@ export class SceneHarness {
 
     for (let i = 0; i < this.renderSystems.length; i++) {
       this.renderSystems[i]!.render({
-        renderer: renderer,
+        renderer,
         world: this.world,
       });
     }
@@ -64,5 +72,9 @@ export class SceneHarness {
 
   registerRenderSystem(system: RenderSystem): void {
     this.renderSystems.push(system);
+  }
+
+  close(): void {
+    this.userInput.close();
   }
 }

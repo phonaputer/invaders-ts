@@ -1,5 +1,5 @@
 export default interface Renderer {
-  drawImage(
+  drawImage: (
     image: CanvasImageSource,
     sx: number,
     sy: number,
@@ -9,7 +9,7 @@ export default interface Renderer {
     dy: number,
     dw: number,
     dh: number,
-  ): void;
+  ) => void;
 
-  clearRect(x: number, y: number, w: number, h: number): void;
+  clearRect: (x: number, y: number, w: number, h: number) => void;
 }

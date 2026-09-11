@@ -1,9 +1,13 @@
 export default class ScalingCanvasRenderer {
-  constructor(
-    private readonly ctx: CanvasRenderingContext2D,
-    private readonly scaleFactorX: number,
-    private readonly scaleFactorY: number,
-  ) {}
+  private readonly ctx: CanvasRenderingContext2D;
+  private readonly scaleFactorX: number;
+  private readonly scaleFactorY: number;
+
+  constructor(ctx: CanvasRenderingContext2D, scaleFactorX: number, scaleFactorY: number) {
+    this.ctx = ctx;
+    this.scaleFactorX = scaleFactorX;
+    this.scaleFactorY = scaleFactorY;
+  }
 
   drawImage(
     image: CanvasImageSource,

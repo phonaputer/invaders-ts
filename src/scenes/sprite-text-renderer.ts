@@ -59,7 +59,11 @@ const CHARACTER_DRAW_HEIGHT = 8;
 const CHARACTER_X_SPACING = 6;
 
 export default class SpriteTextRenderer {
-  constructor(private readonly spriteSheet: HTMLImageElement) {}
+  private readonly spriteSheet: HTMLImageElement;
+
+  constructor(spriteSheet: HTMLImageElement) {
+    this.spriteSheet = spriteSheet;
+  }
 
   renderText(renderer: Renderer, x: number, y: number, text: string) {
     let curX = x;

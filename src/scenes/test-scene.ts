@@ -55,10 +55,10 @@ class TestTickSystem {
       const direction = Math.sign(Velocity.y[entity]!);
 
       if (newY + Position.h[entity]! > GAME_HEIGHT || newY < 0) {
-        Velocity.y[entity] = 0.01 * direction * -1;
+        Velocity.y[entity] = 0.001 * direction * -1;
       } else {
         Position.y[entity] = newY;
-        Velocity.y[entity]! += 0.025 * direction;
+        Velocity.y[entity]! += 0.012 * direction;
       }
     }
   }
@@ -77,12 +77,12 @@ export const initializeTestScene = (ctx: InitializeCtx): void => {
   addComponent(ctx.world, testEntity, Velocity);
   addComponent(ctx.world, testEntity, Sprite);
 
-  const SQUARE_WH = 75;
+  const INVADER_WH = 37;
 
-  Position.x[testEntity] = GAME_WIDTH / 2 - SQUARE_WH / 2;
+  Position.x[testEntity] = GAME_WIDTH / 2 - INVADER_WH / 2;
   Position.y[testEntity] = 10;
-  Position.w[testEntity] = SQUARE_WH;
-  Position.h[testEntity] = SQUARE_WH;
+  Position.w[testEntity] = INVADER_WH;
+  Position.h[testEntity] = INVADER_WH;
 
   Velocity.x[testEntity] = 0;
   Velocity.y[testEntity] = 0.01;
@@ -92,6 +92,6 @@ export const initializeTestScene = (ctx: InitializeCtx): void => {
   Sprite.srcY[testEntity] = 0;
   Sprite.srcW[testEntity] = 16;
   Sprite.srcH[testEntity] = 16;
-  Sprite.dstW[testEntity] = SQUARE_WH;
-  Sprite.dstH[testEntity] = SQUARE_WH;
+  Sprite.dstW[testEntity] = INVADER_WH;
+  Sprite.dstH[testEntity] = INVADER_WH;
 };
