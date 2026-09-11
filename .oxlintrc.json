@@ -9,8 +9,10 @@
   "rules": {
     "eslint/no-magic-numbers": "off", // Gonna have quite a few of these in the component setup logic.
     "eslint/id-length": "off", // I actually don't mind short names. Also this catches `for (let i = 0`...
-    "eslint/one-var": "off", // Sometimes I'm grouping constants separately for a reason.
+    "eslint/one-var": ["error", "never"], // I just prefer having each var in its own declaration.
     "eslint/sort-imports": "off", // My idea of sorted (alphabetical) and ESLint's idea of sorted are apparently different.
+    "eslint/sort-keys": "off", // Keys in components will be sorted semantically, not alphabetically.
+    "eslint/max-statements": "off", // Long entity creation functions will violate this at lower lengths, and validating some really long number is pretty useless.
 
     "typescript/prefer-for-of": "off" // For-of is slower and this is a 60fps game so I care about that.
   },

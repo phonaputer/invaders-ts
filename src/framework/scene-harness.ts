@@ -21,6 +21,7 @@ export class SceneHarness {
 
     initializeScene({
       systemRegistry: this,
+      world: this.world,
     });
   }
 
