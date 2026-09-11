@@ -1,8 +1,4 @@
-import {
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
-  MAX_ENTITIES,
-} from "@src/framework/constants";
+import { GAME_HEIGHT, GAME_WIDTH, MAX_ENTITIES } from "@src/framework/constants";
 import type { RenderCtx } from "@src/framework/render-system";
 import type { InitializeCtx } from "@src/framework/scene";
 import type { TickCtx } from "@src/framework/tick-system";
@@ -36,10 +32,8 @@ var spriteSheetImage: HTMLImageElement | undefined = undefined;
 
 class TestRenderSystem {
   render(ctx: RenderCtx): void {
-    ctx.rendering.imageSmoothingEnabled = false;
-
     for (const entity of query(ctx.world, [Position, Sprite])) {
-      ctx.rendering.drawImage(
+      ctx.renderer.drawImage(
         Sprite.image[entity]!,
         Sprite.srcX[entity]!,
         Sprite.srcY[entity]!,
@@ -60,7 +54,7 @@ class TestTickSystem {
       const newY = Position.y[entity]! + Velocity.y[entity]! * ctx.deltaMs;
       const direction = Math.sign(Velocity.y[entity]!);
 
-      if (newY + Position.h[entity]! > CANVAS_HEIGHT || newY < 0) {
+      if (newY + Position.h[entity]! > GAME_HEIGHT || newY < 0) {
         Velocity.y[entity] = 0.01 * direction * -1;
       } else {
         Position.y[entity] = newY;
@@ -85,7 +79,7 @@ export const initializeTestScene = (ctx: InitializeCtx): void => {
 
   const SQUARE_WH = 75;
 
-  Position.x[testEntity] = CANVAS_WIDTH / 2 - SQUARE_WH / 2;
+  Position.x[testEntity] = GAME_WIDTH / 2 - SQUARE_WH / 2;
   Position.y[testEntity] = 10;
   Position.w[testEntity] = SQUARE_WH;
   Position.h[testEntity] = SQUARE_WH;

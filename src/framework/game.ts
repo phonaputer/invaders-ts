@@ -1,10 +1,12 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@src/framework/constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
+import ScalingCanvasRenderer from "@src/framework/scaling-canvas-renderer";
 import type { SceneInitializationCallback } from "@src/framework/scene";
 import { SceneHarness } from "@src/framework/scene-harness";
 
 export class Game {
   private canvas?: HTMLCanvasElement;
   private renderCtx?: CanvasRenderingContext2D;
+  private renderer?: ScalingCanvasRenderer;
 
   private initializeSceneCallback: SceneInitializationCallback | undefined;
   private curScene?: SceneHarness;
@@ -17,7 +19,11 @@ export class Game {
     this.canvas = document.getElementById(canvasID) as HTMLCanvasElement;
     this.canvas.width = CANVAS_WIDTH;
     this.canvas.height = CANVAS_HEIGHT;
+
     this.renderCtx = this.canvas.getContext("2d")!;
+    this.renderCtx.imageSmoothingEnabled = false;
+
+    this.renderer = new ScalingCanvasRenderer(this.renderCtx, CANVAS_WIDTH / GAME_WIDTH, CANVAS_HEIGHT / GAME_HEIGHT);
 
     requestAnimationFrame(this.animate);
   }
@@ -36,7 +42,7 @@ export class Game {
   }
 
   private animate = (currentMs: number): void => {
-    this.getScene().frame(this.renderCtx!, currentMs);
+    this.getScene().frame(this.renderer!, currentMs);
     requestAnimationFrame(this.animate);
   };
 }

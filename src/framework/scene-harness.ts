@@ -1,9 +1,6 @@
-import {
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
-  MS_PER_TICK,
-} from "@src/framework/constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, MS_PER_TICK } from "@src/framework/constants";
 import type { RenderSystem } from "@src/framework/render-system";
+import type Renderer from "@src/framework/renderer";
 import type { SceneInitializationCallback } from "@src/framework/scene";
 import type { TickSystem } from "@src/framework/tick-system";
 import { type World, createWorld } from "bitecs";
@@ -25,7 +22,7 @@ export class SceneHarness {
     });
   }
 
-  frame(ctx: CanvasRenderingContext2D, currentMs: number): void {
+  frame(renderer: Renderer, currentMs: number): void {
     const elapsedMs = currentMs - this.previousFrameMs;
     this.previousFrameMs = currentMs;
     this.untickedMs += elapsedMs;
@@ -37,7 +34,7 @@ export class SceneHarness {
       this.tick(MS_PER_TICK, thisTickAbsoluteMs);
     }
 
-    this.render(ctx);
+    this.render(renderer);
   }
 
   private tick(deltaMs: number, currentMs: number): void {
@@ -50,12 +47,12 @@ export class SceneHarness {
     }
   }
 
-  private render(ctx: CanvasRenderingContext2D): void {
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  private render(renderer: Renderer): void {
+    renderer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     for (let i = 0; i < this.renderSystems.length; i++) {
       this.renderSystems[i]!.render({
-        rendering: ctx,
+        renderer: renderer,
         world: this.world,
       });
     }

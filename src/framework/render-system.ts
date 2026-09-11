@@ -1,7 +1,8 @@
+import type Renderer from "@src/framework/renderer";
 import { type World } from "bitecs";
 
 export interface RenderCtx {
-  rendering: CanvasRenderingContext2D;
+  renderer: Renderer;
   world: World;
 }
 

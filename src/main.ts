@@ -1,10 +1,10 @@
 import "@src/style.css";
 
 import { Game } from "@src/framework/game";
-import { initializeTestScene } from "@src/scenes/test-scene";
+import initializeStartScreenScene from "@src/scenes/start-screen/start-screen-scene";
 
 window.addEventListener("load", () => {
   const game = new Game();
-  game.setScene(initializeTestScene);
+  game.setScene(initializeStartScreenScene);
   game.run("game-canvas");
 });
