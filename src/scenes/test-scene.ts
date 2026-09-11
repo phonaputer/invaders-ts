@@ -57,14 +57,14 @@ class TestRenderSystem {
 class TestTickSystem {
   tick(ctx: TickCtx): void {
     for (const entity of query(ctx.world, [Position, Velocity])) {
-      const newY = Position.y[entity]! + Velocity.y[entity]!;
+      const newY = Position.y[entity]! + Velocity.y[entity]! * ctx.deltaMs;
       const direction = Math.sign(Velocity.y[entity]!);
 
       if (newY + Position.h[entity]! > CANVAS_HEIGHT || newY < 0) {
-        Velocity.y[entity] = direction * -1;
+        Velocity.y[entity] = 0.01 * direction * -1;
       } else {
         Position.y[entity] = newY;
-        Velocity.y[entity]! += 0.3 * direction;
+        Velocity.y[entity]! += 0.025 * direction;
       }
     }
   }
@@ -91,7 +91,7 @@ export const initializeTestScene = (ctx: InitializeCtx): void => {
   Position.h[testEntity] = SQUARE_WH;
 
   Velocity.x[testEntity] = 0;
-  Velocity.y[testEntity] = 1;
+  Velocity.y[testEntity] = 0.01;
 
   Sprite.image[testEntity] = spriteSheetImage!;
   Sprite.srcX[testEntity] = 16;

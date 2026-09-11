@@ -35,8 +35,8 @@ export class Game {
     return this.curScene;
   }
 
-  private animate = (thisFrameMs: number): void => {
-    this.getScene().frame(this.renderCtx!, thisFrameMs);
+  private animate = (currentMs: number): void => {
+    this.getScene().frame(this.renderCtx!, currentMs);
     requestAnimationFrame(this.animate);
   };
 }

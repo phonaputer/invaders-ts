@@ -25,23 +25,27 @@ export class SceneHarness {
     });
   }
 
-  frame(ctx: CanvasRenderingContext2D, thisFrameMs: number): void {
-    const elapsedMs = thisFrameMs - this.previousFrameMs;
-    this.previousFrameMs = thisFrameMs;
+  frame(ctx: CanvasRenderingContext2D, currentMs: number): void {
+    const elapsedMs = currentMs - this.previousFrameMs;
+    this.previousFrameMs = currentMs;
     this.untickedMs += elapsedMs;
 
     while (this.untickedMs >= MS_PER_TICK) {
       this.untickedMs -= MS_PER_TICK;
-      this.tick();
+      const thisTickAbsoluteMs = currentMs - this.untickedMs;
+
+      this.tick(MS_PER_TICK, thisTickAbsoluteMs);
     }
 
     this.render(ctx);
   }
 
-  private tick(): void {
+  private tick(deltaMs: number, currentMs: number): void {
     for (let i = 0; i < this.tickSystems.length; i++) {
       this.tickSystems[i]!.tick({
         world: this.world,
+        deltaMs,
+        currentMs,
       });
     }
   }

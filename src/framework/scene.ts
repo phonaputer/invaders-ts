@@ -8,7 +8,6 @@ interface SystemRegistry {
 }
 
 export interface InitializeCtx {
-  // TODO asset registry
   systemRegistry: SystemRegistry;
   world: World;
 }
