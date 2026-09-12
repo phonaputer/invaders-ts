@@ -11,6 +11,8 @@ export default class PlayerAttackSystem {
         continue;
       }
 
+      PlayerAttack.nextAttackMs[entity] = ctx.currentMs + PlayerAttack.msPerAttack[entity]!;
+
       PlayerAttack.callback[entity]!({ ctx, entity, x: Position.x[entity]!, y: Position.y[entity]! });
     }
   }

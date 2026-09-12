@@ -2,7 +2,7 @@ import { MAX_ENTITIES } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
 import type { EntityId } from "bitecs";
 
-interface PlayerAttackCallbackArgs {
+export interface PlayerAttackCallbackArgs {
   ctx: TickCtx;
   entity: EntityId;
   x: number;

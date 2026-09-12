@@ -1,10 +1,12 @@
+import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
 import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
+import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasion/components/player-attack";
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
 import Position from "@src/scenes/invasion/components/position";
-import { addComponent, addEntity, type World } from "bitecs";
-
-import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
 import Sprite from "@src/scenes/invasion/components/sprite";
+import newPlayerMuzzleFlash from "@src/scenes/invasion/entities/player-muzzle-flash";
+import newPlayerProjectile, { activeProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
+import { addComponent, addEntity, type World } from "bitecs";
 
 interface NewPlayerContext {
   world: World;
@@ -13,6 +15,11 @@ interface NewPlayerContext {
 
 const newPlayer = (ctx: NewPlayerContext): void => {
   const entity = addEntity(ctx.world);
+
+  addComponent(ctx.world, entity, PlayerAttack);
+  PlayerAttack.msPerAttack[entity] = 150;
+  PlayerAttack.nextAttackMs[entity] = ctx.currentMs + 50;
+  PlayerAttack.callback[entity] = standardWeaponCallback;
 
   addComponent(ctx.world, entity, PlayerMovement);
   PlayerMovement.nextFrameMs[entity] = ctx.currentMs + 66;
@@ -45,6 +52,15 @@ const newPlayer = (ctx: NewPlayerContext): void => {
   Sprite.srcH[entity] = 16;
   Sprite.dstW[entity] = 16;
   Sprite.dstH[entity] = 16;
+};
+
+const standardWeaponCallback = ({ ctx, entity, x, y }: PlayerAttackCallbackArgs): void => {
+  if (activeProjectileCount() >= 3) {
+    return;
+  }
+
+  newPlayerProjectile(ctx, { x, y });
+  newPlayerMuzzleFlash(ctx, entity);
 };
 
 export default newPlayer;

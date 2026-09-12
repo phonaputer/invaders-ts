@@ -14,6 +14,7 @@
     "eslint/sort-keys": "off", // Keys in components will be sorted semantically, not alphabetically.
     "eslint/max-statements": "off", // Long entity creation functions will violate this at lower lengths, and validating some really long number is pretty useless.
     "eslint/max-params": "off", // This is violated by the wrapper around 2D rendering context, which is necessary.
+    "eslint/no-continue": "off", // I prefer "continue" to "else" blocks because it decreases the total amount of indented blocks.
 
     "typescript/prefer-for-of": "off" // For-of is slower and this is a 60fps game so I care about that.
   },

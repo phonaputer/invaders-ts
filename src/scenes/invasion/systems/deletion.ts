@@ -8,7 +8,7 @@ export default class DeletionSystem {
   tick(ctx: TickCtx): void {
     for (const entity of query(ctx.world, [TTL])) {
       if (TTL.expirationMs[entity]! <= ctx.currentMs) {
-        addComponent(ctx.world, entity, TTL);
+        addComponent(ctx.world, entity, ToBeDeleted);
       }
     }
 
