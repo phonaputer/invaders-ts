@@ -13,7 +13,7 @@ export default class DeletionSystem {
     }
 
     for (const entity of query(ctx.world, [ToBeDeleted, DeletionCallback])) {
-      DeletionCallback.callback[entity]!(entity);
+      DeletionCallback.callback[entity]!(ctx, entity);
     }
 
     for (const entity of query(ctx.world, [ToBeDeleted])) {

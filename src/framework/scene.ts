@@ -15,6 +15,7 @@ interface SystemRegistry {
 }
 
 export interface InitializeCtx {
+  currentMs: number;
   systemRegistry: SystemRegistry;
   world: World;
 }

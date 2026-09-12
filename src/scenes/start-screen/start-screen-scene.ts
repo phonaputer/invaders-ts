@@ -3,8 +3,8 @@ import type Renderer from "@src/framework/renderer";
 import type { InitializeCtx } from "@src/framework/scene";
 import type { TickCtx } from "@src/framework/tick-system";
 import { Input } from "@src/framework/user-input";
+import initializeInvasionScene from "@src/scenes/invasion/invasion-scene";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
-import { initializeTestScene } from "@src/scenes/test-scene";
 
 import spriteSheetSrc from "@src/assets/space_invaders.png";
 
@@ -65,7 +65,7 @@ class TickSystem {
       }
 
       if (ctx.currentMs > spaceEngagedTime + SPACE_TO_SCENE_SWAP_MS) {
-        ctx.sceneSetter.setScene(initializeTestScene);
+        ctx.sceneSetter.setScene(initializeInvasionScene);
       }
     } else {
       if (ctx.userInput.initiated(Input.Fire)) {

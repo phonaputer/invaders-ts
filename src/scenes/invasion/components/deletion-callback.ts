@@ -1,6 +1,7 @@
+import type { TickCtx } from "@src/framework/tick-system";
 import type { EntityId } from "bitecs";
 
-type DeletionCallbackFunction = (entity: EntityId) => void;
+type DeletionCallbackFunction = (ctx: TickCtx, entity: EntityId) => void;
 
 const DeletionCallback = {
   callback: [] as DeletionCallbackFunction[],

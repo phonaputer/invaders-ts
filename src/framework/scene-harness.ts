@@ -16,11 +16,12 @@ export class SceneHarness {
   private previousFrameMs = 0;
   private untickedMs = 0;
 
-  constructor(initializeScene: SceneInitializationCallback) {
+  constructor(initializeScene: SceneInitializationCallback, currentMs: number) {
     this.world = createWorld();
     this.userInput = new BrowserInputWatcher();
 
     initializeScene({
+      currentMs,
       systemRegistry: this,
       world: this.world,
     });

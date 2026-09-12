@@ -28,13 +28,13 @@ export class Game {
     requestAnimationFrame(this.animate);
   }
 
-  private getScene(): SceneHarness {
+  private getScene(currentMs: number): SceneHarness {
     if (this.initializeSceneCallback !== undefined) {
       if (this.curScene !== undefined) {
         this.curScene.close();
       }
 
-      this.curScene = new SceneHarness(this.initializeSceneCallback);
+      this.curScene = new SceneHarness(this.initializeSceneCallback, currentMs);
       this.initializeSceneCallback = undefined;
     }
 
@@ -46,7 +46,7 @@ export class Game {
   }
 
   private animate = (currentMs: number): void => {
-    this.getScene().frame(this, this.renderer!, currentMs);
+    this.getScene(currentMs).frame(this, this.renderer!, currentMs);
     requestAnimationFrame(this.animate);
   };
 }

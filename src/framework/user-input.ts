@@ -35,10 +35,7 @@ export class BrowserInputWatcher {
       "keydown",
       (e) => {
         const input = this.browserKeysToInputs[e.key];
-
-        console.log(e.key, input);
-
-        if (input) {
+        if (input !== undefined) {
           this.currentlyPressedKeys.add(input);
         }
       },
@@ -49,7 +46,7 @@ export class BrowserInputWatcher {
       "keyup",
       (e) => {
         const input = this.browserKeysToInputs[e.key];
-        if (input) {
+        if (input !== undefined) {
           this.currentlyPressedKeys.delete(input);
         }
       },
