@@ -1,3 +1,5 @@
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@src/framework/constants";
+
 export default class ScalingCanvasRenderer {
   private readonly ctx: CanvasRenderingContext2D;
   private readonly scaleFactorX: number;
@@ -33,7 +35,17 @@ export default class ScalingCanvasRenderer {
     );
   }
 
-  clearRect(x: number, y: number, w: number, h: number) {
-    this.ctx.clearRect(x, y, w, h);
+  drawLine(startX: number, startY: number, endX: number, endY: number, color: string, widthPx: number): void {
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = widthPx;
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(startX * this.scaleFactorX, startY * this.scaleFactorY);
+    this.ctx.lineTo(endX * this.scaleFactorX, endY * this.scaleFactorY);
+    this.ctx.stroke();
+  }
+
+  clearAll() {
+    this.ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 }

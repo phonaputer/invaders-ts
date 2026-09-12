@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH, MS_PER_TICK } from "@src/framework/constants";
+import { MS_PER_TICK } from "@src/framework/constants";
 import type { RenderSystem } from "@src/framework/render-system";
 import type Renderer from "@src/framework/renderer";
 import type { SceneInitializationCallback } from "@src/framework/scene";
@@ -57,7 +57,7 @@ export class SceneHarness {
   }
 
   private render(renderer: Renderer): void {
-    renderer.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    renderer.clearAll();
 
     for (let i = 0; i < this.renderSystems.length; i++) {
       this.renderSystems[i]!.render({

@@ -2,11 +2,15 @@ import type { InitializeCtx } from "@src/framework/scene";
 import newPlayer from "@src/scenes/invasion/entities/player";
 import AnimationSystem from "@src/scenes/invasion/systems/animation";
 import DeletionSystem from "@src/scenes/invasion/systems/deletion";
+import HUDRenderingSystem from "@src/scenes/invasion/systems/hud-rendering";
 import PlayerAttackSystem from "@src/scenes/invasion/systems/player-attack";
 import PlayerMovementSystem from "@src/scenes/invasion/systems/player-movement";
 import PositionFollowingSystem from "@src/scenes/invasion/systems/position-following";
 import SpriteRenderingSystem from "@src/scenes/invasion/systems/sprite-rendering";
 import VelocitySystem from "@src/scenes/invasion/systems/velocity";
+
+import spriteSheetSrc from "@src/assets/space_invaders.png";
+import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
 const initializeInvasionScene = (ctx: InitializeCtx): void => {
   ctx.systemRegistry.registerTickSystem(new VelocitySystem());
@@ -16,6 +20,11 @@ const initializeInvasionScene = (ctx: InitializeCtx): void => {
   ctx.systemRegistry.registerTickSystem(new DeletionSystem());
   ctx.systemRegistry.registerTickSystem(new AnimationSystem());
 
+  // TOOO needs rewrite
+  const spriteSheetImage = new Image();
+  spriteSheetImage.src = spriteSheetSrc;
+
+  ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(spriteSheetImage)));
   ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
 
   newPlayer(ctx);
