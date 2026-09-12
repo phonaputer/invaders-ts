@@ -6,7 +6,7 @@ interface Frame {
 }
 
 const Animation = {
-  nextFrameMs: [] as number[],
+  nextFrameMs: new Float64Array(MAX_ENTITIES),
   msPerFrame: new Int16Array(MAX_ENTITIES),
   currentFrame: new Int8Array(MAX_ENTITIES),
   strip: [] as Frame[][],
