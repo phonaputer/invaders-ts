@@ -3,6 +3,8 @@ import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Position from "@src/scenes/invasion/components/position";
+import type Collision from "@src/scenes/invasion/events/collision";
+import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/events/collision";
 import { query, type EntityId } from "bitecs";
 
 const BUCKET_WIDTH = 15;
@@ -28,7 +30,7 @@ export default class CollisionDetectionSystem {
 
   constructor() {
     for (let x = 0; x < GAME_WIDTH; x += BUCKET_WIDTH) {
-      let xBucket: Hitbox[][] = [];
+      const xBucket: Hitbox[][] = [];
 
       for (let y = 0; y < GAME_HEIGHT; y += BUCKET_HEIGHT) {
         xBucket.push([] as Hitbox[]);
@@ -43,7 +45,7 @@ export default class CollisionDetectionSystem {
     this.fillBuckets(ctx);
 
     for (const bucket of this.bucketsToCheck.values()) {
-      this.checkCollisions(this.hitboxBuckets[bucket.x]![bucket.y]!);
+      this.checkCollisions(ctx, this.hitboxBuckets[bucket.x]![bucket.y]!);
     }
   }
 
@@ -58,11 +60,11 @@ export default class CollisionDetectionSystem {
         passive: false,
       };
 
-      const minBucket = this.findBucketForPoint(hitbox.x, hitbox.y);
-      const maxBucket = this.findBucketForPoint(hitbox.x + hitbox.w, hitbox.y + hitbox.h);
+      const { x: minX, y: minY } = this.findBucketForPoint(hitbox.x, hitbox.y);
+      const { x: maxX, y: maxY } = this.findBucketForPoint(hitbox.x + hitbox.w, hitbox.y + hitbox.h);
 
-      for (let x = minBucket.x; x <= maxBucket.x; x++) {
-        for (let y = minBucket.y; y <= maxBucket.y; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        for (let y = minY; y <= maxY; y++) {
           this.addToBucket(hitbox, x, y);
           this.bucketsToCheck.set(this.bucketKey(x, y), { x, y });
         }
@@ -79,11 +81,11 @@ export default class CollisionDetectionSystem {
         passive: true,
       };
 
-      const minBucket = this.findBucketForPoint(hitbox.x, hitbox.y);
-      const maxBucket = this.findBucketForPoint(hitbox.x + hitbox.w, hitbox.y + hitbox.h);
+      const { x: minX, y: minY } = this.findBucketForPoint(hitbox.x, hitbox.y);
+      const { x: maxX, y: maxY } = this.findBucketForPoint(hitbox.x + hitbox.w, hitbox.y + hitbox.h);
 
-      for (let x = minBucket.x; x <= maxBucket.x; x++) {
-        for (let y = minBucket.y; y <= maxBucket.y; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        for (let y = minY; y <= maxY; y++) {
           this.addToBucket(hitbox, x, y);
         }
       }
@@ -106,8 +108,8 @@ export default class CollisionDetectionSystem {
   }
 
   clearBuckets() {
-    for (let yBucket of this.hitboxBuckets) {
-      for (let cellBucket of yBucket) {
+    for (const yBucket of this.hitboxBuckets) {
+      for (const cellBucket of yBucket) {
         cellBucket.length = 0;
       }
     }
@@ -115,7 +117,7 @@ export default class CollisionDetectionSystem {
     this.bucketsToCheck.clear();
   }
 
-  checkCollisions(hitboxes: Hitbox[]): void {
+  checkCollisions(ctx: TickCtx, hitboxes: Hitbox[]): void {
     for (let l = 0; l < hitboxes.length; l++) {
       const left = hitboxes[l]!;
 
@@ -123,14 +125,24 @@ export default class CollisionDetectionSystem {
         const right = hitboxes[r]!;
 
         if (this.areTouching(left, right)) {
-          this.logCollision(left.entity, right.entity);
+          this.logCollision(ctx, left.entity, right.entity);
         }
       }
     }
   }
 
-  logCollision(left: EntityId, right: EntityId): void {
-    console.log(left, right); //FIXME
+  logCollision(ctx: TickCtx, left: EntityId, right: EntityId): void {
+    const rightEvent: Collision = {
+      entity: right,
+      other: left,
+    };
+    const leftEvent: Collision = {
+      entity: left,
+      other: right,
+    };
+
+    ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, rightEvent);
+    ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, leftEvent);
   }
 
   areTouching(left: Hitbox, right: Hitbox): boolean {
