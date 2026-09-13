@@ -1,6 +1,6 @@
 export default interface Renderer {
   drawImage: (
-    image: CanvasImageSource,
+    imageID: string,
     sx: number,
     sy: number,
     sw: number,

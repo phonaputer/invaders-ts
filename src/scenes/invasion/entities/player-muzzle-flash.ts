@@ -1,9 +1,9 @@
-import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
 import Animation from "@src/scenes/invasion/components/animation";
 import Position from "@src/scenes/invasion/components/position";
 import PositionFollowing from "@src/scenes/invasion/components/position-following";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import TTL from "@src/scenes/invasion/components/ttl";
+import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import { addComponent, addEntity, type EntityId, type World } from "bitecs";
 
 interface NewMuzzleFlashContext {
@@ -34,12 +34,8 @@ const newPlayerMuzzleFlash = (ctx: NewMuzzleFlashContext, player: EntityId): voi
   PositionFollowing.xOffset[entity] = 0;
   PositionFollowing.yOffset[entity] = 0;
 
-  // TODO this is gonna create multiple images if multiple players get created. needs fixin'
-  const spriteSheetImage = new Image();
-  spriteSheetImage.src = spaceInvadersSpritesheet;
-
   addComponent(ctx.world, entity, Sprite);
-  Sprite.image[entity] = spriteSheetImage;
+  Sprite.image[entity] = SPRITE_SHEET_IMG_ID;
   Sprite.srcX[entity] = 48;
   Sprite.srcY[entity] = 32;
   Sprite.srcW[entity] = 16;

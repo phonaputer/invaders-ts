@@ -59,10 +59,10 @@ const CHARACTER_DRAW_HEIGHT = 8;
 const CHARACTER_X_SPACING = 6;
 
 export default class SpriteTextRenderer {
-  private readonly spriteSheet: HTMLImageElement;
+  private readonly spriteSheetImageID: string;
 
-  constructor(spriteSheet: HTMLImageElement) {
-    this.spriteSheet = spriteSheet;
+  constructor(spriteSheetImageID: string) {
+    this.spriteSheetImageID = spriteSheetImageID;
   }
 
   renderText(renderer: Renderer, x: number, y: number, text: string) {
@@ -73,7 +73,7 @@ export default class SpriteTextRenderer {
 
       if (frame) {
         renderer.drawImage(
-          this.spriteSheet,
+          this.spriteSheetImageID,
           CHARACTER_SRC_WIDTH * frame.x,
           CHARACTER_SRC_HEIGHT * frame.y,
           CHARACTER_SRC_WIDTH,

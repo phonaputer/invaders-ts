@@ -1,12 +1,14 @@
 import type { RenderCtx } from "@src/framework/render-system";
 import type Renderer from "@src/framework/renderer";
-import type { InitializeCtx } from "@src/framework/scene";
+import type { LoadAssetsCtx, SetSceneCtx } from "@src/framework/scene";
 import type { TickCtx } from "@src/framework/tick-system";
 import { Input } from "@src/framework/user-input";
-import initializeInvasionScene from "@src/scenes/invasion/invasion-scene";
+import InvasionScene from "@src/scenes/invasion/invasion-scene";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
 import spriteSheetSrc from "@src/assets/space_invaders.png";
+
+const SPRITE_SHEET_IMG_ID = "spritesheet";
 
 const SPACE_TO_SCENE_SWAP_MS = 750;
 let spaceEngagedTime = 0;
@@ -22,29 +24,29 @@ interface TextRenderer {
 
 class RenderSystem {
   private readonly textRenderer: TextRenderer;
-  private readonly spriteSheetImage: HTMLImageElement;
+  private readonly spriteSheetImageID: string;
 
-  constructor(textRenderer: TextRenderer, spriteSheetImage: HTMLImageElement) {
+  constructor(textRenderer: TextRenderer, spriteSheetImageID: string) {
     this.textRenderer = textRenderer;
-    this.spriteSheetImage = spriteSheetImage;
+    this.spriteSheetImageID = spriteSheetImageID;
   }
 
   render(ctx: RenderCtx): void {
     this.textRenderer.renderTextCentered(ctx.renderer, 60, "personal space invaders");
 
-    ctx.renderer.drawImage(this.spriteSheetImage, 64, 0, 16, 16, 60, 85, 16, 16);
+    ctx.renderer.drawImage(this.spriteSheetImageID, 64, 0, 16, 16, 60, 85, 16, 16);
     this.textRenderer.renderTextCentered(ctx.renderer, 90, " - 10 points");
 
-    ctx.renderer.drawImage(this.spriteSheetImage, 16, 16, 16, 16, 60, 100, 16, 16);
+    ctx.renderer.drawImage(this.spriteSheetImageID, 16, 16, 16, 16, 60, 100, 16, 16);
     this.textRenderer.renderTextCentered(ctx.renderer, 105, " - 20 points");
 
-    ctx.renderer.drawImage(this.spriteSheetImage, 16, 0, 16, 16, 60, 115, 16, 16);
+    ctx.renderer.drawImage(this.spriteSheetImageID, 16, 0, 16, 16, 60, 115, 16, 16);
     this.textRenderer.renderTextCentered(ctx.renderer, 120, " - 30 points");
 
-    ctx.renderer.drawImage(this.spriteSheetImage, 96, 0, 16, 16, 60, 130, 16, 16);
+    ctx.renderer.drawImage(this.spriteSheetImageID, 96, 0, 16, 16, 60, 130, 16, 16);
     this.textRenderer.renderTextCentered(ctx.renderer, 135, " - 40 points");
 
-    ctx.renderer.drawImage(this.spriteSheetImage, 96, 64, 24, 16, 52, 145, 24, 16);
+    ctx.renderer.drawImage(this.spriteSheetImageID, 96, 64, 24, 16, 52, 145, 24, 16);
     this.textRenderer.renderTextCentered(ctx.renderer, 150, " -  ? points");
 
     this.textRenderer.renderTextCentered(ctx.renderer, 180, "<a> and <d> to move");
@@ -65,7 +67,7 @@ class TickSystem {
       }
 
       if (ctx.currentMs > spaceEngagedTime + SPACE_TO_SCENE_SWAP_MS) {
-        ctx.sceneSetter.setScene(initializeInvasionScene);
+        ctx.sceneSetter.setScene(InvasionScene);
       }
     } else {
       if (ctx.userInput.initiated(Input.Fire)) {
@@ -76,12 +78,16 @@ class TickSystem {
   }
 }
 
-const initializeStartScreenScene = (ctx: InitializeCtx): void => {
-  const spriteSheetImage = new Image();
-  spriteSheetImage.src = spriteSheetSrc;
-
-  ctx.systemRegistry.registerRenderSystem(new RenderSystem(new SpriteTextRenderer(spriteSheetImage), spriteSheetImage));
-  ctx.systemRegistry.registerTickSystem(new TickSystem());
+const StartScreenScene = {
+  loadAssets: (ctx: LoadAssetsCtx): void => {
+    ctx.assetLoader.loadImage(SPRITE_SHEET_IMG_ID, spriteSheetSrc);
+  },
+  setScene: (ctx: SetSceneCtx): void => {
+    ctx.systemRegistry.registerRenderSystem(
+      new RenderSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID), SPRITE_SHEET_IMG_ID),
+    );
+    ctx.systemRegistry.registerTickSystem(new TickSystem());
+  },
 };
 
-export default initializeStartScreenScene;
+export default StartScreenScene;

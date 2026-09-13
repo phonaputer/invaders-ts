@@ -1,4 +1,5 @@
-import type { InitializeCtx } from "@src/framework/scene";
+import type { LoadAssetsCtx, SetSceneCtx } from "@src/framework/scene";
+import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import newPlayer from "@src/scenes/invasion/entities/player";
 import AnimationSystem from "@src/scenes/invasion/systems/animation";
 import DeletionSystem from "@src/scenes/invasion/systems/deletion";
@@ -8,26 +9,27 @@ import PlayerMovementSystem from "@src/scenes/invasion/systems/player-movement";
 import PositionFollowingSystem from "@src/scenes/invasion/systems/position-following";
 import SpriteRenderingSystem from "@src/scenes/invasion/systems/sprite-rendering";
 import VelocitySystem from "@src/scenes/invasion/systems/velocity";
-
-import spriteSheetSrc from "@src/assets/space_invaders.png";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
-const initializeInvasionScene = (ctx: InitializeCtx): void => {
-  ctx.systemRegistry.registerTickSystem(new VelocitySystem());
-  ctx.systemRegistry.registerTickSystem(new PlayerMovementSystem());
-  ctx.systemRegistry.registerTickSystem(new PlayerAttackSystem());
-  ctx.systemRegistry.registerTickSystem(new PositionFollowingSystem());
-  ctx.systemRegistry.registerTickSystem(new DeletionSystem());
-  ctx.systemRegistry.registerTickSystem(new AnimationSystem());
+import spriteSheetSrc from "@src/assets/space_invaders.png";
 
-  // TOOO needs rewrite
-  const spriteSheetImage = new Image();
-  spriteSheetImage.src = spriteSheetSrc;
+const InvasionScene = {
+  loadAssets: (ctx: LoadAssetsCtx): void => {
+    ctx.assetLoader.loadImage(SPRITE_SHEET_IMG_ID, spriteSheetSrc);
+  },
+  setScene: (ctx: SetSceneCtx): void => {
+    ctx.systemRegistry.registerTickSystem(new VelocitySystem());
+    ctx.systemRegistry.registerTickSystem(new PlayerMovementSystem());
+    ctx.systemRegistry.registerTickSystem(new PlayerAttackSystem());
+    ctx.systemRegistry.registerTickSystem(new PositionFollowingSystem());
+    ctx.systemRegistry.registerTickSystem(new DeletionSystem());
+    ctx.systemRegistry.registerTickSystem(new AnimationSystem());
 
-  ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(spriteSheetImage)));
-  ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
+    ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
+    ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
 
-  newPlayer(ctx);
+    newPlayer(ctx);
+  },
 };
 
-export default initializeInvasionScene;
+export default InvasionScene;

@@ -1,8 +1,8 @@
-import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
 import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import Velocity from "@src/scenes/invasion/components/velocity";
+import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import { addComponent, addEntity, type World } from "bitecs";
 
 interface NewProjectileContext {
@@ -37,12 +37,8 @@ const newPlayerProjectile = (ctx: NewProjectileContext, position: Position): voi
   Position.w[entity] = 16;
   Position.h[entity] = 16;
 
-  // TODO this is gonna create multiple images if multiple players get created. needs fixin'
-  const spriteSheetImage = new Image();
-  spriteSheetImage.src = spaceInvadersSpritesheet;
-
   addComponent(ctx.world, entity, Sprite);
-  Sprite.image[entity] = spriteSheetImage;
+  Sprite.image[entity] = SPRITE_SHEET_IMG_ID;
   Sprite.srcX[entity] = 112;
   Sprite.srcY[entity] = 16;
   Sprite.srcW[entity] = 16;

@@ -1,9 +1,9 @@
-import spaceInvadersSpritesheet from "@src/assets/space_invaders.png";
 import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasion/components/player-attack";
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
+import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import newPlayerMuzzleFlash from "@src/scenes/invasion/entities/player-muzzle-flash";
 import newPlayerProjectile, { activeProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
 import { addComponent, addEntity, type World } from "bitecs";
@@ -40,12 +40,8 @@ const newPlayer = (ctx: NewPlayerContext): void => {
   Position.w[entity] = 16;
   Position.h[entity] = 16;
 
-  // TODO this is gonna create multiple images if multiple players get created. needs fixin'
-  const spriteSheetImage = new Image();
-  spriteSheetImage.src = spaceInvadersSpritesheet;
-
   addComponent(ctx.world, entity, Sprite);
-  Sprite.image[entity] = spriteSheetImage;
+  Sprite.image[entity] = SPRITE_SHEET_IMG_ID;
   Sprite.srcX[entity] = 0;
   Sprite.srcY[entity] = 32;
   Sprite.srcW[entity] = 16;

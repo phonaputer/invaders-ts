@@ -1,7 +1,7 @@
 import { MAX_ENTITIES } from "@src/framework/constants";
 
 const Sprite = {
-  image: [] as HTMLImageElement[],
+  image: [] as string[],
   srcX: new Int8Array(MAX_ENTITIES),
   srcY: new Int8Array(MAX_ENTITIES),
   srcW: new Int8Array(MAX_ENTITIES),

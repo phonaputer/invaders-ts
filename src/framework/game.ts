@@ -1,6 +1,6 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH, GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import ScalingCanvasRenderer from "@src/framework/scaling-canvas-renderer";
-import type { SceneInitializationCallback } from "@src/framework/scene";
+import type Scene from "@src/framework/scene";
 import { SceneHarness } from "@src/framework/scene-harness";
 
 export class Game {
@@ -8,14 +8,10 @@ export class Game {
   private renderCtx?: CanvasRenderingContext2D;
   private renderer?: ScalingCanvasRenderer;
 
-  private initializeSceneCallback: SceneInitializationCallback | undefined;
+  private newScene: Scene | undefined;
   private curScene?: SceneHarness;
 
-  setScene(initializeScene: SceneInitializationCallback): void {
-    this.initializeSceneCallback = initializeScene;
-  }
-
-  run(canvasID: string): void {
+  run(canvasID: string, scene: Scene): void {
     this.canvas = document.getElementById(canvasID) as HTMLCanvasElement;
     this.canvas.width = CANVAS_WIDTH;
     this.canvas.height = CANVAS_HEIGHT;
@@ -25,28 +21,53 @@ export class Game {
 
     this.renderer = new ScalingCanvasRenderer(this.renderCtx, CANVAS_WIDTH / GAME_WIDTH, CANVAS_HEIGHT / GAME_HEIGHT);
 
-    requestAnimationFrame(this.animate);
+    this.startNewScene(scene);
   }
 
-  private getScene(currentMs: number): SceneHarness {
-    if (this.initializeSceneCallback !== undefined) {
-      if (this.curScene !== undefined) {
-        this.curScene.close();
-      }
+  setScene(scene: Scene): void {
+    this.newScene = scene;
+  }
 
-      this.curScene = new SceneHarness(this.initializeSceneCallback, currentMs);
-      this.initializeSceneCallback = undefined;
+  private startNewScene(scene: Scene) {
+    if (this.curScene !== undefined) {
+      this.curScene.close();
     }
 
-    if (this.curScene === undefined) {
-      throw new Error("Tried to animate game with no scene.");
+    this.curScene = new SceneHarness(scene, this.renderer!, this);
+
+    this.curScene
+      .waitUntilSceneIsReady()
+      .then(() => {
+        requestAnimationFrame(this.animate);
+      })
+      .catch((error) => {
+        console.log("Failed to load new scene:", error);
+      });
+  }
+
+  private getScene(): SceneHarness | undefined {
+    if (this.newScene === undefined && this.curScene !== undefined) {
+      return this.curScene;
     }
 
-    return this.curScene;
+    if (this.newScene === undefined) {
+      throw new Error("Tried to run game with no scene.");
+    }
+
+    this.startNewScene(this.newScene);
+    this.newScene = undefined;
+
+    return undefined;
   }
 
   private animate = (currentMs: number): void => {
-    this.getScene(currentMs).frame(this, this.renderer!, currentMs);
+    const scene = this.getScene();
+    if (scene === undefined) {
+      return;
+    }
+
+    scene.frame(currentMs);
+
     requestAnimationFrame(this.animate);
   };
 }
