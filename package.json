@@ -19,13 +19,14 @@
     "lint:fix": "oxlint --fix",
     "precommit": "npm run lint && npm run test",
     "preview": "vite preview",
-    "test": "echo \"Coming soon...\" && exit 1"
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/node": "^22.20.2",
     "oxlint": "^1.82.0",
     "typescript": "^7.0.2",
-    "vite": "^8.2.2"
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "bitecs": "^0.4.0"

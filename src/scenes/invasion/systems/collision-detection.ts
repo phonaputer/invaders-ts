@@ -49,7 +49,7 @@ export default class CollisionDetectionSystem {
     }
   }
 
-  fillBuckets(ctx: TickCtx) {
+  private fillBuckets(ctx: TickCtx) {
     for (const entity of query(ctx.world, [CollisionActive, Position])) {
       const hitbox: Hitbox = {
         entity,
@@ -92,22 +92,22 @@ export default class CollisionDetectionSystem {
     }
   }
 
-  findBucketForPoint(x: number, y: number): Bucket {
+  private findBucketForPoint(x: number, y: number): Bucket {
     return {
       x: Math.trunc(x / BUCKET_WIDTH),
       y: Math.trunc(y / BUCKET_HEIGHT),
     };
   }
 
-  bucketKey(x: number, y: number): string {
+  private bucketKey(x: number, y: number): string {
     return `${x}:${y}`;
   }
 
-  addToBucket(hitbox: Hitbox, x: number, y: number): void {
+  private addToBucket(hitbox: Hitbox, x: number, y: number): void {
     this.hitboxBuckets[x]![y]!.push(hitbox);
   }
 
-  clearBuckets() {
+  private clearBuckets() {
     for (const yBucket of this.hitboxBuckets) {
       for (const cellBucket of yBucket) {
         cellBucket.length = 0;
@@ -117,7 +117,7 @@ export default class CollisionDetectionSystem {
     this.bucketsToCheck.clear();
   }
 
-  checkCollisions(ctx: TickCtx, hitboxes: Hitbox[]): void {
+  private checkCollisions(ctx: TickCtx, hitboxes: Hitbox[]): void {
     for (let l = 0; l < hitboxes.length; l++) {
       const left = hitboxes[l]!;
 
@@ -131,7 +131,7 @@ export default class CollisionDetectionSystem {
     }
   }
 
-  logCollision(ctx: TickCtx, left: EntityId, right: EntityId): void {
+  private logCollision(ctx: TickCtx, left: EntityId, right: EntityId): void {
     const rightEvent: Collision = {
       entity: right,
       other: left,
@@ -145,7 +145,7 @@ export default class CollisionDetectionSystem {
     ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, leftEvent);
   }
 
-  areTouching(left: Hitbox, right: Hitbox): boolean {
+  private areTouching(left: Hitbox, right: Hitbox): boolean {
     if (right.passive && left.passive) {
       return false;
     }
