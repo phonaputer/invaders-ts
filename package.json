@@ -17,12 +17,14 @@
     "dev": "vite",
     "lint": "tsc --noemit && oxlint",
     "lint:fix": "oxlint --fix",
-    "precommit": "npm run lint && npm run test",
+    "precommit": "npm run test && npm run lint",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest run",
+    "test-coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@types/node": "^22.20.2",
+    "@vitest/coverage-v8": "^5.0.0",
     "oxlint": "^1.82.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.2",

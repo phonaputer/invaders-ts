@@ -3,8 +3,7 @@ import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Position from "@src/scenes/invasion/components/position";
-import type Collision from "@src/scenes/invasion/events/collision";
-import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/events/collision";
+import { COLLISION_EVENT_TYPE, type default as Collision } from "@src/scenes/invasion/events/collision";
 import { query, type EntityId } from "bitecs";
 
 const BUCKET_WIDTH = 15;

@@ -1,14 +1,15 @@
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  base: "./",
-  build: {
-    outDir: "dist",
-  },
   resolve: {
     alias: {
       "@src": path.resolve(import.meta.dirname, "./src"),
+    },
+  },
+  test: {
+    coverage: {
+      include: ["src/**/*.ts"],
     },
   },
 });

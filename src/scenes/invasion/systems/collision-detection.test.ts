@@ -13,24 +13,22 @@ interface CollisionDetectionSystemTestSetup {
   system: CollisionDetectionSystem;
 }
 
-const setupTest = (): CollisionDetectionSystemTestSetup => {
-  return {
-    ctx: {
-      currentMs: 0,
-      deltaMs: 1,
-      eventLog: new DefaultEventLog(),
-      sceneSetter: {
-        setScene: vi.fn(),
-      },
-      userInput: {
-        initiated: vi.fn(),
-        held: vi.fn(),
-      },
-      world: createWorld(),
+const setupTest = (): CollisionDetectionSystemTestSetup => ({
+  ctx: {
+    currentMs: 0,
+    deltaMs: 1,
+    eventLog: new DefaultEventLog(),
+    sceneSetter: {
+      setScene: vi.fn(),
     },
-    system: new CollisionDetectionSystem(),
-  };
-};
+    userInput: {
+      initiated: vi.fn(),
+      held: vi.fn(),
+    },
+    world: createWorld(),
+  },
+  system: new CollisionDetectionSystem(),
+});
 
 interface Hitbox {
   x: number;
@@ -39,7 +37,7 @@ interface Hitbox {
   h: number;
 }
 
-const createEntityWithHitbox = (ctx: TickCtx, hitbox: Hitbox, passive: boolean = false): EntityId => {
+const createEntityWithHitbox = (ctx: TickCtx, hitbox: Hitbox, passive = false): EntityId => {
   const entity = addEntity(ctx.world);
 
   addComponent(ctx.world, entity, Position);
@@ -83,7 +81,7 @@ const expectCollided = (ctx: TickCtx, left: EntityId, right: EntityId): void => 
 const expectDidNotCollide = (ctx: TickCtx, entity: EntityId): void => {
   const collisions = ctx.eventLog.getTick(COLLISION_EVENT_TYPE);
 
-  expect(collisions).not.toEqual(expect.arrayContaining([expect.objectContaining({ entity: entity })]));
+  expect(collisions).not.toEqual(expect.arrayContaining([expect.objectContaining({ entity })]));
   expect(collisions).not.toEqual(expect.arrayContaining([expect.objectContaining({ other: entity })]));
 };
 

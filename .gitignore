@@ -6,3 +6,6 @@
 
 # Vitest reports and artifacts
 /.vitest
+
+# Vitest code coverage report
+/coverage

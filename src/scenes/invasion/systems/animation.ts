@@ -16,7 +16,7 @@ export default class AnimationSystem {
     this.executeAnimations(ctx);
   }
 
-  executeAnimations(ctx: TickCtx) {
+  private executeAnimations(ctx: TickCtx) {
     for (const entity of query(ctx.world, [Animation, Sprite])) {
       if (Animation.nextFrameMs[entity]! > ctx.currentMs) {
         continue;
@@ -41,7 +41,7 @@ export default class AnimationSystem {
     }
   }
 
-  executeUnpausableAnimations(ctx: TickCtx) {
+  private executeUnpausableAnimations(ctx: TickCtx) {
     for (const entity of query(ctx.world, [AnimationUnpausable, Sprite])) {
       if (AnimationUnpausable.nextFrameMs[entity]! > ctx.currentMs) {
         continue;

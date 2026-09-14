@@ -19,7 +19,7 @@ export default class PlayerMovementSystem {
     }
   }
 
-  handleInput(ctx: TickCtx, entity: EntityId) {
+  private handleInput(ctx: TickCtx, entity: EntityId) {
     const leftInput = ctx.userInput.held(Input.Left);
     const rightInput = ctx.userInput.held(Input.Right);
 
@@ -32,7 +32,7 @@ export default class PlayerMovementSystem {
     }
   }
 
-  moveLeft(entity: EntityId) {
+  private moveLeft(entity: EntityId) {
     const newX = Math.max(0, Position.x[entity]! - PlayerMovement.speedX[entity]!);
 
     if (Position.x[entity] != newX) {
@@ -45,7 +45,7 @@ export default class PlayerMovementSystem {
     Position.x[entity] = newX;
   }
 
-  moveRight(entity: EntityId) {
+  private moveRight(entity: EntityId) {
     let newX = Position.x[entity]! + PlayerMovement.speedX[entity]!;
     if (newX + Position.w[entity]! > GAME_WIDTH) {
       newX = GAME_WIDTH - Position.w[entity]!;
@@ -61,7 +61,7 @@ export default class PlayerMovementSystem {
     Position.x[entity] = newX;
   }
 
-  animate(ctx: TickCtx, entity: EntityId) {
+  private animate(ctx: TickCtx, entity: EntityId) {
     if (PlayerMovement.playing[entity] === false || PlayerMovement.nextFrameMs[entity]! > ctx.currentMs) {
       return;
     }
@@ -74,7 +74,7 @@ export default class PlayerMovementSystem {
     Sprite.srcY[entity] = frame.y * Sprite.srcH[entity]!;
   }
 
-  advanceFrame(entity: EntityId): Frame {
+  private advanceFrame(entity: EntityId): Frame {
     const strip = PlayerMovement.strip[entity]!;
 
     let currentFrame = PlayerMovement.currentFrame[entity]!;
