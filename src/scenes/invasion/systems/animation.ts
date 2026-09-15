@@ -25,12 +25,7 @@ export default class AnimationSystem {
       Animation.nextFrameMs[entity] = ctx.currentMs + Animation.msPerFrame[entity]!;
 
       const strip = Animation.strip[entity]!;
-
-      let currentFrame = Animation.currentFrame[entity]!;
-      currentFrame++;
-      if (currentFrame >= strip.length) {
-        currentFrame = 0;
-      }
+      const currentFrame = (Animation.currentFrame[entity]! + 1) % strip.length;
 
       Animation.currentFrame[entity] = currentFrame;
 
@@ -50,12 +45,7 @@ export default class AnimationSystem {
       AnimationUnpausable.nextFrameMs[entity] = ctx.currentMs + AnimationUnpausable.msPerFrame[entity]!;
 
       const strip = AnimationUnpausable.strip[entity]!;
-
-      let currentFrame = AnimationUnpausable.currentFrame[entity]!;
-      currentFrame++;
-      if (currentFrame >= strip.length) {
-        currentFrame = 0;
-      }
+      const currentFrame = (AnimationUnpausable.currentFrame[entity]! + 1) % strip.length;
 
       AnimationUnpausable.currentFrame[entity] = currentFrame;
 

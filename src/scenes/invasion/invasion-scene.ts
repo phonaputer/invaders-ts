@@ -12,6 +12,8 @@ import VelocitySystem from "@src/scenes/invasion/systems/velocity";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
 import spriteSheetSrc from "@src/assets/space_invaders.png";
+import setupInvaders from "@src/scenes/invasion/entities/invaders";
+import InvaderOrchestrationSystem from "@src/scenes/invasion/systems/invader-orchestration";
 
 const InvasionScene = {
   loadAssets: (ctx: LoadAssetsCtx): void => {
@@ -24,11 +26,13 @@ const InvasionScene = {
     ctx.systemRegistry.registerTickSystem(new PositionFollowingSystem());
     ctx.systemRegistry.registerTickSystem(new DeletionSystem());
     ctx.systemRegistry.registerTickSystem(new AnimationSystem());
+    ctx.systemRegistry.registerTickSystem(new InvaderOrchestrationSystem());
 
     ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
 
     newPlayer(ctx);
+    setupInvaders(ctx);
   },
 };
 
