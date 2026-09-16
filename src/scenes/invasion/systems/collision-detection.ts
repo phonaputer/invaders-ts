@@ -9,6 +9,11 @@ import { query, type EntityId } from "bitecs";
 const BUCKET_WIDTH = 15;
 const BUCKET_HEIGHT = 15;
 
+const NUM_NEGATIVE_X_BUCKETS = 2;
+const NUM_NEGATIVE_Y_BUCKETS = 2;
+const NUM_POSITIVE_OFFSCREEN_X_BUCKETS = 2;
+const NUM_POSITIVE_OFFSCREEN_Y_BUCKETS = 2;
+
 interface Hitbox {
   entity: EntityId;
   x: number;
@@ -28,10 +33,13 @@ export default class CollisionDetectionSystem {
   private readonly hitboxBuckets = [] as Hitbox[][][];
 
   constructor() {
-    for (let x = 0; x < GAME_WIDTH; x += BUCKET_WIDTH) {
+    const xBuckets = Math.ceil(GAME_WIDTH / BUCKET_WIDTH) + NUM_NEGATIVE_X_BUCKETS + NUM_POSITIVE_OFFSCREEN_X_BUCKETS;
+    const yBuckets = Math.ceil(GAME_HEIGHT / BUCKET_HEIGHT) + NUM_NEGATIVE_Y_BUCKETS + NUM_POSITIVE_OFFSCREEN_Y_BUCKETS;
+
+    for (let x = 0; x < xBuckets; x++) {
       const xBucket: Hitbox[][] = [];
 
-      for (let y = 0; y < GAME_HEIGHT; y += BUCKET_HEIGHT) {
+      for (let y = 0; y < yBuckets; y++) {
         xBucket.push([] as Hitbox[]);
       }
 
@@ -93,8 +101,8 @@ export default class CollisionDetectionSystem {
 
   private findBucketForPoint(x: number, y: number): Bucket {
     return {
-      x: Math.trunc(x / BUCKET_WIDTH),
-      y: Math.trunc(y / BUCKET_HEIGHT),
+      x: Math.trunc(x / BUCKET_WIDTH) + NUM_NEGATIVE_X_BUCKETS,
+      y: Math.trunc(y / BUCKET_HEIGHT) + NUM_NEGATIVE_Y_BUCKETS,
     };
   }
 
