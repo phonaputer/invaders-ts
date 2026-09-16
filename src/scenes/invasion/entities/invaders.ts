@@ -43,10 +43,10 @@ const setupInvaders = (ctx: SetupInvadersContext) => {
   InvaderOrchestrationState.nextAttackMs = 320 + ctx.currentMs;
   InvaderOrchestrationState.currentArpIndex = 0;
   InvaderOrchestrationState.movingLeft = false;
-  InvaderOrchestrationState.noInvadersCallback = (ctx: TickCtx) => {
-    setupInvaders(ctx);
+  InvaderOrchestrationState.noInvadersCallback = (tickCtx: TickCtx) => {
+    setupInvaders(tickCtx);
   };
-  InvaderOrchestrationState.touchdownCallback = (_ctx: TickCtx) => {
+  InvaderOrchestrationState.touchdownCallback = (_tickCtx: TickCtx) => {
     console.log("You lose - more coming here soon...");
   };
 };
