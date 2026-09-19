@@ -1,4 +1,6 @@
+import type { TickCtx } from "@src/framework/tick-system";
 import Damage from "@src/scenes/invasion/components/damage";
+import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import InvaderAnimation from "@src/scenes/invasion/components/invader-animation";
 import InvaderOrchestration from "@src/scenes/invasion/components/invader-orchestration";
@@ -6,7 +8,8 @@ import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import DamageType from "@src/scenes/invasion/damage-type";
-import { addComponent, addEntity, type EntityId, type World } from "bitecs";
+import newExplosion from "@src/scenes/invasion/entities/explosion";
+import { addComponent, addEntity, hasComponent, type EntityId, type World } from "bitecs";
 
 interface NewInvaderContext {
   world: World;
@@ -31,12 +34,23 @@ interface NewBaseInvaderArgs {
   strip: Frame[];
 }
 
+const onDelete = (ctx: TickCtx, entity: EntityId): void => {
+  if (!hasComponent(ctx.world, entity, Position)) {
+    return;
+  }
+
+  newExplosion(ctx, { x: Position.x[entity]!, y: Position.y[entity]! });
+};
+
 const newBaseInvader = (args: NewBaseInvaderArgs): EntityId => {
   const entity = addEntity(args.ctx.world);
 
   addComponent(args.ctx.world, entity, Damage);
   Damage.type[entity] = DamageType.Alien;
   Damage.amount[entity] = 1;
+
+  addComponent(args.ctx.world, entity, DeletionCallback);
+  DeletionCallback.callback[entity] = onDelete;
 
   addComponent(args.ctx.world, entity, Hitpoints);
   Hitpoints.susceptibleToDamageType[entity] = DamageType.PlayerProjectile;
