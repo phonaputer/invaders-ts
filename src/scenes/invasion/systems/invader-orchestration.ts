@@ -21,6 +21,8 @@ export default class InvaderOrchestrationSystem {
       return;
     }
 
+    this.attack(ctx);
+
     if (!this.shouldMoveThisTick(ctx, invaderCount)) {
       return;
     }
@@ -31,6 +33,16 @@ export default class InvaderOrchestrationSystem {
 
   private countInvaders(ctx: TickCtx): number {
     return query(ctx.world, [InvaderOrchestration]).length;
+  }
+
+  private attack(ctx: TickCtx): void {
+    if (ctx.currentMs < InvaderOrchestrationState.nextAttackMs) {
+      return;
+    }
+
+    InvaderOrchestrationState.nextAttackMs = ctx.currentMs + InvaderOrchestrationState.msPerAttack;
+
+    InvaderOrchestrationState.attackCallback(ctx);
   }
 
   private shouldMoveThisTick(ctx: TickCtx, invaderCount: number): boolean {

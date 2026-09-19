@@ -11,8 +11,9 @@ const InvaderOrchestrationState = {
   nextAttackMs: 0,
   currentArpIndex: 0,
   movingLeft: false,
-  noInvadersCallback: (_ctx: TickCtx) => void {},
-  touchdownCallback: (_ctx: TickCtx) => void {},
+  noInvadersCallback: (_ctx: TickCtx): void => {},
+  touchdownCallback: (_ctx: TickCtx): void => {},
+  attackCallback: (_ctx: TickCtx): void => {},
 };
 
 export default InvaderOrchestrationState;

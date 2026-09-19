@@ -1,10 +1,25 @@
 import type { TickCtx } from "@src/framework/tick-system";
+import InvaderOrchestration from "@src/scenes/invasion/components/invader-orchestration";
+import Position from "@src/scenes/invasion/components/position";
 import InvaderOrchestrationState from "@src/scenes/invasion/components/singleton/invader-orchestration-state";
 import newCrab from "@src/scenes/invasion/entities/invader-crab";
 import newJellyfish from "@src/scenes/invasion/entities/invader-jellyfish";
 import newOctopus from "@src/scenes/invasion/entities/invader-octopus";
+import newInvaderProjectile from "@src/scenes/invasion/entities/invader-projectile";
 import newTadpole from "@src/scenes/invasion/entities/invader-tadpole";
-import type { World } from "bitecs";
+import { query, type World } from "bitecs";
+
+const onAttack = (ctx: TickCtx): void => {
+  const invaders = query(ctx.world, [Position, InvaderOrchestration]);
+
+  if (invaders.length < 1) {
+    return;
+  }
+
+  const attackingInvader = invaders[Math.floor(Math.random() * invaders.length)]!;
+
+  newInvaderProjectile(ctx, { x: Position.x[attackingInvader]!, y: Position.y[attackingInvader]! });
+};
 
 interface SetupInvadersContext {
   world: World;
@@ -49,6 +64,7 @@ const setupInvaders = (ctx: SetupInvadersContext) => {
   InvaderOrchestrationState.touchdownCallback = (_tickCtx: TickCtx) => {
     console.log("You lose - more coming here soon...");
   };
+  InvaderOrchestrationState.attackCallback = onAttack;
 };
 
 export default setupInvaders;
