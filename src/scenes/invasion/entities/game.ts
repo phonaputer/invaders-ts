@@ -3,9 +3,10 @@ import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeo
 import Position from "@src/scenes/invasion/components/position";
 import HUD from "@src/scenes/invasion/components/singleton/hud";
 import Pause from "@src/scenes/invasion/components/singleton/pause";
+import setupInvaders from "@src/scenes/invasion/entities/invaders";
 import newPlayer from "@src/scenes/invasion/entities/player";
 import newPlayerExplosion from "@src/scenes/invasion/entities/player-explosion";
-import { addComponent, addEntity, type EntityId } from "bitecs";
+import { addComponent, addEntity, type EntityId, type World } from "bitecs";
 
 const DEFEAT_PAUSE_MS = 2400;
 
@@ -24,4 +25,17 @@ export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
 const respawn = (ctx: TickCtx): void => {
   Pause.paused = false;
   newPlayer(ctx);
+};
+
+interface SetupContext {
+  world: World;
+  currentMs: number;
+}
+
+export const setupGame = (ctx: SetupContext): void => {
+  newPlayer(ctx);
+  setupInvaders(ctx);
+
+  HUD.remainingLives = 2;
+  HUD.score = 0;
 };

@@ -1,6 +1,5 @@
 import type { LoadAssetsCtx, SetSceneCtx } from "@src/framework/scene";
 import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
-import newPlayer from "@src/scenes/invasion/entities/player";
 import AnimationSystem from "@src/scenes/invasion/systems/animation";
 import DeletionSystem from "@src/scenes/invasion/systems/deletion";
 import HUDRenderingSystem from "@src/scenes/invasion/systems/hud-rendering";
@@ -12,7 +11,7 @@ import VelocitySystem from "@src/scenes/invasion/systems/velocity";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
 import spriteSheetSrc from "@src/assets/space_invaders.png";
-import setupInvaders from "@src/scenes/invasion/entities/invaders";
+import { setupGame } from "@src/scenes/invasion/entities/game";
 import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
 import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
 import DamageSystem from "@src/scenes/invasion/systems/damage";
@@ -37,8 +36,7 @@ const InvasionScene = {
     ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
 
-    newPlayer(ctx);
-    setupInvaders(ctx);
+    setupGame(ctx);
   },
 };
 

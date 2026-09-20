@@ -21,18 +21,13 @@ const onAttack = (ctx: TickCtx): void => {
   newInvaderProjectile(ctx, { x: Position.x[attackingInvader]!, y: Position.y[attackingInvader]! });
 };
 
-interface SetupInvadersContext {
-  world: World;
-  currentMs: number;
-}
-
 const STARTING_X = 2;
 const ALIEN_WIDTH = 14;
 const ALIEN_HEIGHT = 14;
 const COL_SPACING = 2;
 const ROW_SPACING = -1.2;
 
-const setupInvaders = (ctx: SetupInvadersContext) => {
+const rackInvaders = (ctx: TickCtx): void => {
   let x = STARTING_X;
   let y = 32;
 
@@ -48,6 +43,17 @@ const setupInvaders = (ctx: SetupInvadersContext) => {
     y += ALIEN_HEIGHT + ROW_SPACING;
   }
 
+  InvaderOrchestrationState.movingLeft = false;
+  InvaderOrchestrationState.currentArpIndex = 0;
+  InvaderOrchestrationState.nextMoveMs = InvaderOrchestrationState.baseMsPerMove + ctx.currentMs;
+};
+
+interface SetupInvadersContext {
+  world: World;
+  currentMs: number;
+}
+
+const setupInvaders = (ctx: SetupInvadersContext) => {
   InvaderOrchestrationState.baseMsPerMove = 66;
   InvaderOrchestrationState.nextMoveMs = 66 + ctx.currentMs;
   InvaderOrchestrationState.xSpeed = 8;
@@ -58,9 +64,7 @@ const setupInvaders = (ctx: SetupInvadersContext) => {
   InvaderOrchestrationState.nextAttackMs = 320 + ctx.currentMs;
   InvaderOrchestrationState.currentArpIndex = 0;
   InvaderOrchestrationState.movingLeft = false;
-  InvaderOrchestrationState.noInvadersCallback = (tickCtx: TickCtx) => {
-    setupInvaders(tickCtx);
-  };
+  InvaderOrchestrationState.noInvadersCallback = rackInvaders;
   InvaderOrchestrationState.touchdownCallback = (_tickCtx: TickCtx) => {
     console.log("You lose - more coming here soon...");
   };
