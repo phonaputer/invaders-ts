@@ -1,4 +1,4 @@
-import Animation from "@src/scenes/invasion/components/animation";
+import AnimationUnpausable from "@src/scenes/invasion/components/animation-unpausable";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import TTL from "@src/scenes/invasion/components/ttl";
@@ -18,11 +18,11 @@ interface Positon {
 const newExplosion = (ctx: NewExplosionContext, { x, y }: Positon): void => {
   const entity = addEntity(ctx.world);
 
-  addComponent(ctx.world, entity, Animation);
-  Animation.msPerFrame[entity] = 80;
-  Animation.nextFrameMs[entity] = ctx.currentMs + 80;
-  Animation.currentFrame[entity] = 0;
-  Animation.strip[entity] = [
+  addComponent(ctx.world, entity, AnimationUnpausable);
+  AnimationUnpausable.msPerFrame[entity] = 80;
+  AnimationUnpausable.nextFrameMs[entity] = ctx.currentMs + 80;
+  AnimationUnpausable.currentFrame[entity] = 0;
+  AnimationUnpausable.strip[entity] = [
     { x: 3, y: 1 },
     { x: 4, y: 1 },
     { x: 5, y: 1 },
