@@ -1,9 +1,15 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
+import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
+import Damage from "@src/scenes/invasion/components/damage";
+import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
+import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasion/components/player-attack";
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
+import DamageType from "@src/scenes/invasion/damage-type";
+import { onPlayerDefeat } from "@src/scenes/invasion/entities/game";
 import newPlayerMuzzleFlash from "@src/scenes/invasion/entities/player-muzzle-flash";
 import newPlayerProjectile, { activeProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
 import { addComponent, addEntity, type World } from "bitecs";
@@ -15,6 +21,23 @@ interface NewPlayerContext {
 
 const newPlayer = (ctx: NewPlayerContext): void => {
   const entity = addEntity(ctx.world);
+
+  addComponent(ctx.world, entity, CollisionPassive);
+  CollisionPassive.hitboxOffsetX[entity] = 0;
+  CollisionPassive.hitboxOffsetY[entity] = 7;
+  CollisionPassive.hitboxW[entity] = 15;
+  CollisionPassive.hitboxH[entity] = 5;
+
+  addComponent(ctx.world, entity, Damage);
+  Damage.type[entity] = DamageType.Player;
+  Damage.amount[entity] = 1;
+
+  addComponent(ctx.world, entity, DeletionCallback);
+  DeletionCallback.callback[entity] = onPlayerDefeat;
+
+  addComponent(ctx.world, entity, Hitpoints);
+  Hitpoints.susceptibleToDamageType[entity] = DamageType.AlienProjectile;
+  Hitpoints.current[entity] = 1;
 
   addComponent(ctx.world, entity, PlayerAttack);
   PlayerAttack.msPerAttack[entity] = 150;

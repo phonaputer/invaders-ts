@@ -2,6 +2,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import Position from "@src/scenes/invasion/components/position";
+import Pause from "@src/scenes/invasion/components/singleton/pause";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
 import Velocity from "@src/scenes/invasion/components/velocity";
 import VelocitySystem from "@src/scenes/invasion/systems/velocity";
@@ -141,4 +142,21 @@ test("entity moves off bottom of screen, deletion tag added", () => {
 
   expectPosition(entityOne, { x: GAME_WIDTH + 6, y: 5, w: 1, h: 1 });
   expect(hasComponent(ctx.world, entityOne, ToBeDeleted)).toBe(true);
+});
+
+test("game paused, entities don't move", () => {
+  const { ctx, system } = setupTest();
+  const entityOne = addEntity(ctx.world);
+  setPosition(ctx, entityOne, { x: 1, y: 1, w: 1, h: 1 });
+  setVelocity(ctx, entityOne, { x: 2, y: 1 });
+  const entityTwo = addEntity(ctx.world);
+  setPosition(ctx, entityTwo, { x: 1, y: 1, w: 1, h: 1 });
+  setVelocity(ctx, entityTwo, { x: 100, y: 50 });
+
+  Pause.paused = true;
+  system.tick(ctx);
+  Pause.paused = false;
+
+  expectPosition(entityOne, { x: 1, y: 1, w: 1, h: 1 });
+  expectPosition(entityTwo, { x: 1, y: 1, w: 1, h: 1 });
 });

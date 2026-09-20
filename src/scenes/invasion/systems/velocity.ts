@@ -1,6 +1,7 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
 import Position from "@src/scenes/invasion/components/position";
+import Pause from "@src/scenes/invasion/components/singleton/pause";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
 import Velocity from "@src/scenes/invasion/components/velocity";
 import { addComponent, query } from "bitecs";
@@ -9,6 +10,10 @@ const OFFSCREEN_BOUNDARY = 5;
 
 export default class VelocitySystem {
   tick(ctx: TickCtx): void {
+    if (Pause.paused) {
+      return;
+    }
+
     for (const entity of query(ctx.world, [Velocity, Position])) {
       Position.x[entity]! += Velocity.x[entity]!;
       Position.y[entity]! += Velocity.y[entity]!;

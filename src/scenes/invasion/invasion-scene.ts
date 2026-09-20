@@ -13,6 +13,7 @@ import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
 import spriteSheetSrc from "@src/assets/space_invaders.png";
 import setupInvaders from "@src/scenes/invasion/entities/invaders";
+import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
 import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
 import DamageSystem from "@src/scenes/invasion/systems/damage";
 import InvaderOrchestrationSystem from "@src/scenes/invasion/systems/invader-orchestration";
@@ -31,6 +32,7 @@ const InvasionScene = {
     ctx.systemRegistry.registerTickSystem(new PositionFollowingSystem());
     ctx.systemRegistry.registerTickSystem(new AnimationSystem());
     ctx.systemRegistry.registerTickSystem(new InvaderOrchestrationSystem());
+    ctx.systemRegistry.registerTickSystem(new CallbackOnTimeoutSystem());
 
     ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
