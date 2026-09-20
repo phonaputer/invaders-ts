@@ -157,7 +157,7 @@ test("other takes damage and has DamageCallback, callback is invoked", () => {
 
   const entity = addEntity(ctx.world);
   addComponent(ctx.world, entity, Damage);
-  Damage.amount[entity] = 1;
+  Damage.amount[entity] = 3;
   Damage.type[entity] = DamageType.Alien;
 
   const other = addEntity(ctx.world);
@@ -173,5 +173,5 @@ test("other takes damage and has DamageCallback, callback is invoked", () => {
 
   system.tick(ctx);
 
-  expect(callbackFn).toHaveBeenCalledWith(ctx, other);
+  expect(callbackFn).toHaveBeenCalledWith(ctx, other, 3);
 });

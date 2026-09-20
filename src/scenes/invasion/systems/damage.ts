@@ -21,7 +21,7 @@ export default class DamageSystem {
       }
 
       if (hasComponent(ctx.world, collision.other, DamageCallback)) {
-        DamageCallback.callback[collision.other]!(ctx, collision.other);
+        DamageCallback.callback[collision.other]!(ctx, collision.other, Damage.amount[collision.entity]!);
       }
 
       Hitpoints.current[collision.other]! -= Damage.amount[collision.entity]!;
