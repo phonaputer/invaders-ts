@@ -1,4 +1,4 @@
-import { GAME_WIDTH } from "@src/framework/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import type { RenderCtx } from "@src/framework/render-system";
 import type Renderer from "@src/framework/renderer";
 import HUD from "@src/scenes/invasion/components/singleton/hud";
@@ -22,5 +22,9 @@ export default class HUDRenderingSystem {
     this.textRenderer.renderText(ctx.renderer, 6, 6, `score:${HUD.score}`);
     this.textRenderer.renderText(ctx.renderer, GAME_WIDTH / 2 - 31, 6, `hi-score:${HUD.highScore}`);
     this.textRenderer.renderText(ctx.renderer, GAME_WIDTH - 48, 6, `lives:${HUD.remainingLives}`);
+
+    if (HUD.gameOver) {
+      this.textRenderer.renderTextCentered(ctx.renderer, GAME_HEIGHT / 2, "game over");
+    }
   }
 }
