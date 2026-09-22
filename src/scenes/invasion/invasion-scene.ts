@@ -33,8 +33,8 @@ const InvasionScene = {
     ctx.systemRegistry.registerTickSystem(new InvaderOrchestrationSystem());
     ctx.systemRegistry.registerTickSystem(new CallbackOnTimeoutSystem());
 
-    ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
+    ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
 
     setupGame(ctx);
   },

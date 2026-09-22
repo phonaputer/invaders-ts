@@ -12,8 +12,13 @@ import { addComponent, addEntity, type EntityId, type World } from "bitecs";
 const DEFEAT_PAUSE_MS = 2400;
 
 export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
-  HUD.remainingLives--;
   Pause.paused = true;
+
+  if (HUD.remainingLives < 1) {
+    HUD.gameOver = true;
+  } else {
+    HUD.remainingLives--;
+  }
 
   newPlayerExplosion(ctx, { x: Position.x[entity]!, y: Position.y[entity]!, expirationMs: DEFEAT_PAUSE_MS });
 
@@ -24,6 +29,7 @@ export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
 };
 
 const respawn = (ctx: TickCtx): void => {
+  HUD.gameOver = false;
   Pause.paused = false;
   newPlayer(ctx);
 };
@@ -40,4 +46,6 @@ export const setupGame = (ctx: SetupContext): void => {
 
   HUD.remainingLives = 2;
   HUD.score = 0;
+  HUD.gameOver = false;
+  Pause.paused = false;
 };
