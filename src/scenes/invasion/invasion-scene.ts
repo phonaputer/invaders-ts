@@ -34,6 +34,7 @@ import arp4Audio from "@src/scenes/invasion/assets/arp4.wav";
 import playerExplosionAudio from "@src/scenes/invasion/assets/player_explosion.wav";
 import playerShotAudio from "@src/scenes/invasion/assets/player_shot.wav";
 import spriteSheetImage from "@src/scenes/invasion/assets/space_invaders.png";
+import AudioRenderingSystem from "@src/scenes/invasion/systems/audio-rendering";
 
 const InvasionScene = {
   loadAssets: (ctx: LoadAssetsCtx): void => {
@@ -62,6 +63,7 @@ const InvasionScene = {
 
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
     ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
+    ctx.systemRegistry.registerRenderSystem(new AudioRenderingSystem());
 
     setupGame(ctx);
   },

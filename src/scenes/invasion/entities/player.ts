@@ -7,11 +7,12 @@ import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasio
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
-import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
+import { PLAYER_ATTACK_AUDIO, SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import DamageType from "@src/scenes/invasion/damage-type";
 import { onPlayerDefeat } from "@src/scenes/invasion/entities/game";
 import newPlayerMuzzleFlash from "@src/scenes/invasion/entities/player-muzzle-flash";
 import newPlayerProjectile, { activeProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
+import { PLAY_AUDIO_EVENT_TYPE, type default as PlayAudio } from "@src/scenes/invasion/events/play-audio";
 import { addComponent, addEntity, type World } from "bitecs";
 
 interface NewPlayerContext {
@@ -80,6 +81,9 @@ const standardWeaponCallback = ({ ctx, entity, x, y }: PlayerAttackCallbackArgs)
 
   newPlayerProjectile(ctx, { x, y });
   newPlayerMuzzleFlash(ctx, entity);
+
+  const event: PlayAudio = { id: PLAYER_ATTACK_AUDIO };
+  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
 };
 
 export default newPlayer;
