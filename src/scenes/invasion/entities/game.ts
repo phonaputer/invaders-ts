@@ -4,6 +4,7 @@ import Position from "@src/scenes/invasion/components/position";
 import HUD from "@src/scenes/invasion/components/singleton/hud";
 import Pause from "@src/scenes/invasion/components/singleton/pause";
 import setupFortreses from "@src/scenes/invasion/entities/fortress";
+import { scheduleEelSpawn } from "@src/scenes/invasion/entities/invader-eel";
 import setupInvaders from "@src/scenes/invasion/entities/invaders";
 import newPlayer from "@src/scenes/invasion/entities/player";
 import newPlayerExplosion from "@src/scenes/invasion/entities/player-explosion";
@@ -66,6 +67,7 @@ export const setupGame = (ctx: SetupContext): void => {
   newPlayer(ctx);
   setupInvaders(ctx);
   setupFortreses(ctx);
+  scheduleEelSpawn(ctx);
 
   HUD.remainingLives = 2;
   HUD.score = 0;
