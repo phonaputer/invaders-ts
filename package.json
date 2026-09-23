@@ -17,10 +17,9 @@
     "dev": "vite",
     "lint": "tsc --noemit && oxlint",
     "lint:fix": "oxlint --fix",
-    "precommit": "npm run test && npm run lint",
-    "preview": "vite preview",
     "test": "vitest run",
-    "test-coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "verify": "npm run test && npm run lint"
   },
   "devDependencies": {
     "@types/node": "^22.20.2",
