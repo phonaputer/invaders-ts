@@ -1,8 +1,13 @@
 import type { LoadAssetsCtx, SetSceneCtx } from "@src/framework/scene";
 import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
+import { setupGame } from "@src/scenes/invasion/entities/game";
 import AnimationSystem from "@src/scenes/invasion/systems/animation";
+import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
+import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
+import DamageSystem from "@src/scenes/invasion/systems/damage";
 import DeletionSystem from "@src/scenes/invasion/systems/deletion";
 import HUDRenderingSystem from "@src/scenes/invasion/systems/hud-rendering";
+import InvaderOrchestrationSystem from "@src/scenes/invasion/systems/invader-orchestration";
 import PlayerAttackSystem from "@src/scenes/invasion/systems/player-attack";
 import PlayerMovementSystem from "@src/scenes/invasion/systems/player-movement";
 import PositionFollowingSystem from "@src/scenes/invasion/systems/position-following";
@@ -10,12 +15,7 @@ import SpriteRenderingSystem from "@src/scenes/invasion/systems/sprite-rendering
 import VelocitySystem from "@src/scenes/invasion/systems/velocity";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
-import spriteSheetSrc from "@src/assets/space_invaders.png";
-import { setupGame } from "@src/scenes/invasion/entities/game";
-import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
-import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
-import DamageSystem from "@src/scenes/invasion/systems/damage";
-import InvaderOrchestrationSystem from "@src/scenes/invasion/systems/invader-orchestration";
+import spriteSheetSrc from "@src/scenes/invasion/assets/space_invaders.png";
 
 const InvasionScene = {
   loadAssets: (ctx: LoadAssetsCtx): void => {
