@@ -23,6 +23,10 @@ let activeProjectiles = 0;
 
 export const activeProjectileCount = (): number => activeProjectiles;
 
+export const resetActiveProjectileCount = (): void => {
+  activeProjectiles = 0;
+};
+
 const decrementActiveProjectiles = (): void => {
   activeProjectiles--;
 };

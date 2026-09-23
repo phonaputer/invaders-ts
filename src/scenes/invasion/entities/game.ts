@@ -7,7 +7,8 @@ import setupFortreses from "@src/scenes/invasion/entities/fortress";
 import setupInvaders from "@src/scenes/invasion/entities/invaders";
 import newPlayer from "@src/scenes/invasion/entities/player";
 import newPlayerExplosion from "@src/scenes/invasion/entities/player-explosion";
-import { addComponent, addEntity, type EntityId, type World } from "bitecs";
+import { resetActiveProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
+import { addComponent, addEntity, resetWorld, type EntityId, type World } from "bitecs";
 
 const DEFEAT_PAUSE_MS = 2400;
 
@@ -24,8 +25,13 @@ export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
 
   const respawnEntity = addEntity(ctx.world);
   addComponent(ctx.world, respawnEntity, CallbackOnTimeout);
-  CallbackOnTimeout.callback[respawnEntity] = respawn;
   CallbackOnTimeout.callbackMs[respawnEntity] = ctx.currentMs + DEFEAT_PAUSE_MS;
+
+  if (HUD.gameOver) {
+    CallbackOnTimeout.callback[respawnEntity] = reSetupGame;
+  } else {
+    CallbackOnTimeout.callback[respawnEntity] = respawn;
+  }
 };
 
 const respawn = (ctx: TickCtx): void => {
@@ -46,6 +52,19 @@ export const setupGame = (ctx: SetupContext): void => {
 
   HUD.remainingLives = 2;
   HUD.score = 0;
+  HUD.highScore = 0;
   HUD.gameOver = false;
+
   Pause.paused = false;
+};
+
+const reSetupGame = (ctx: SetupContext): void => {
+  const highScore = HUD.highScore;
+
+  resetWorld(ctx.world);
+  resetActiveProjectileCount();
+
+  setupGame(ctx);
+
+  HUD.highScore = highScore;
 };

@@ -2,7 +2,7 @@ import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeout";
 import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
-import { addComponent, addEntity, createWorld, hasComponent } from "bitecs";
+import { addComponent, addEntity, createWorld, entityExists, hasComponent } from "bitecs";
 import { expect, test, vi } from "vitest";
 
 interface CallbackOnTimeoutSystemTestSetup {
@@ -42,7 +42,7 @@ test("timeout not yet reached, callback not invoked", () => {
   expect(hasComponent(ctx.world, entity, CallbackOnTimeout)).toBe(true);
 });
 
-test("timeout reached, callback invoked & component removed", () => {
+test("timeout reached, callback invoked & entity removed", () => {
   const { ctx, system } = setupTest();
   const entity = addEntity(ctx.world);
   addComponent(ctx.world, entity, CallbackOnTimeout);
@@ -54,5 +54,5 @@ test("timeout reached, callback invoked & component removed", () => {
   system.tick(ctx);
 
   expect(callback).toHaveBeenCalledWith(ctx, entity);
-  expect(hasComponent(ctx.world, entity, CallbackOnTimeout)).toBe(false);
+  expect(entityExists(ctx.world, entity)).toBe(false);
 });

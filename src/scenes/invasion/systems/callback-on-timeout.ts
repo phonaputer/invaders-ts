@@ -1,7 +1,7 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeout";
 
-import { query, removeComponent } from "bitecs";
+import { query, removeEntity } from "bitecs";
 
 export default class CallbackOnTimeoutSystem {
   tick(ctx: TickCtx): void {
@@ -11,7 +11,7 @@ export default class CallbackOnTimeoutSystem {
       }
 
       CallbackOnTimeout.callback[entity]!(ctx, entity);
-      removeComponent(ctx.world, entity, CallbackOnTimeout);
+      removeEntity(ctx.world, entity);
     }
   }
 }
