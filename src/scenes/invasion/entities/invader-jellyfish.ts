@@ -13,6 +13,7 @@ const newJellyfish = (args: NewInvaderArgs): void => {
       { x: 1, y: 0 },
       { x: 2, y: 0 },
     ],
+    score: 30,
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);

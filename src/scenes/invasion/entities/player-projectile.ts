@@ -28,7 +28,9 @@ export const resetActiveProjectileCount = (): void => {
 };
 
 const decrementActiveProjectiles = (): void => {
-  activeProjectiles--;
+  if (activeProjectiles > 0) {
+    activeProjectiles--;
+  }
 };
 
 const newPlayerProjectile = (ctx: NewProjectileContext, position: Position): void => {

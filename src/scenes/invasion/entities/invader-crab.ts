@@ -13,6 +13,7 @@ const newCrab = (args: NewInvaderArgs): void => {
       { x: 1, y: 1 },
       { x: 2, y: 1 },
     ],
+    score: 20,
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);

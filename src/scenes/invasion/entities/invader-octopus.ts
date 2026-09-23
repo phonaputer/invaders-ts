@@ -11,6 +11,7 @@ const newOctopus = (args: NewInvaderArgs): void => {
       { x: 6, y: 0 },
       { x: 7, y: 0 },
     ],
+    score: 40,
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);

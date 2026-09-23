@@ -13,6 +13,7 @@ const newTadpole = (args: NewInvaderArgs): void => {
       { x: 4, y: 0 },
       { x: 5, y: 0 },
     ],
+    score: 10,
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);

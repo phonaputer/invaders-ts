@@ -12,6 +12,13 @@ import { addComponent, addEntity, resetWorld, type EntityId, type World } from "
 
 const DEFEAT_PAUSE_MS = 2400;
 
+export const incrementScore = (score: number): void => {
+  HUD.score += score;
+  if (HUD.highScore < HUD.score) {
+    HUD.highScore = HUD.score;
+  }
+};
+
 export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
   Pause.paused = true;
 
