@@ -2,6 +2,7 @@ import type { TickCtx } from "@src/framework/tick-system";
 import InvaderOrchestration from "@src/scenes/invasion/components/invader-orchestration";
 import Position from "@src/scenes/invasion/components/position";
 import InvaderOrchestrationState from "@src/scenes/invasion/components/singleton/invader-orchestration-state";
+import { onInvaderTouchdown } from "@src/scenes/invasion/entities/game";
 import newCrab from "@src/scenes/invasion/entities/invader-crab";
 import newJellyfish from "@src/scenes/invasion/entities/invader-jellyfish";
 import newOctopus from "@src/scenes/invasion/entities/invader-octopus";
@@ -65,9 +66,7 @@ const setupInvaders = (ctx: SetupInvadersContext) => {
   InvaderOrchestrationState.currentArpIndex = 0;
   InvaderOrchestrationState.movingLeft = false;
   InvaderOrchestrationState.noInvadersCallback = rackInvaders;
-  InvaderOrchestrationState.touchdownCallback = (_tickCtx: TickCtx) => {
-    console.log("You lose - more coming here soon...");
-  };
+  InvaderOrchestrationState.touchdownCallback = onInvaderTouchdown;
   InvaderOrchestrationState.attackCallback = onAttack;
 };
 

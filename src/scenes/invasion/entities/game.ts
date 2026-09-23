@@ -19,6 +19,16 @@ export const incrementScore = (score: number): void => {
   }
 };
 
+export const onInvaderTouchdown = (ctx: TickCtx): void => {
+  Pause.paused = true;
+  HUD.gameOver = true;
+
+  const resetEntity = addEntity(ctx.world);
+  addComponent(ctx.world, resetEntity, CallbackOnTimeout);
+  CallbackOnTimeout.callbackMs[resetEntity] = ctx.currentMs + DEFEAT_PAUSE_MS;
+  CallbackOnTimeout.callback[resetEntity] = reSetupGame;
+};
+
 export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
   Pause.paused = true;
 
