@@ -6,9 +6,13 @@ import { Input } from "@src/framework/user-input";
 import InvasionScene from "@src/scenes/invasion/invasion-scene";
 import SpriteTextRenderer from "@src/scenes/sprite-text-renderer";
 
-import spriteSheetSrc from "@src/assets/space_invaders.png";
+import menuSelectAudio from "@src/scenes/invasion/assets/menu_select.wav";
+import spriteSheetSrc from "@src/scenes/invasion/assets/space_invaders.png";
 
 const SPRITE_SHEET_IMG_ID = "spritesheet";
+const MENU_SELECT_AUDIO_ID = "menu-select";
+
+const SPACE_ENGAGED_EVENT = "space-engaged";
 
 const SPACE_TO_SCENE_SWAP_MS = 750;
 let spaceEngagedTime = 0;
@@ -55,6 +59,10 @@ class RenderSystem {
     if (isBlinkingTextVisible) {
       this.textRenderer.renderTextCentered(ctx.renderer, 220, "press <space> to begin");
     }
+
+    if (ctx.eventLog.getRender(SPACE_ENGAGED_EVENT).length > 0) {
+      ctx.assetGetter.getAudio(MENU_SELECT_AUDIO_ID)?.play();
+    }
   }
 }
 
@@ -73,6 +81,7 @@ class TickSystem {
       if (ctx.userInput.initiated(Input.Fire)) {
         blinkEngaged = true;
         spaceEngagedTime = ctx.currentMs;
+        ctx.eventLog.pushRender(SPACE_ENGAGED_EVENT, true);
       }
     }
   }
@@ -81,6 +90,7 @@ class TickSystem {
 const StartScreenScene = {
   loadAssets: (ctx: LoadAssetsCtx): void => {
     ctx.assetLoader.loadImage(SPRITE_SHEET_IMG_ID, spriteSheetSrc);
+    ctx.assetLoader.loadAudio(MENU_SELECT_AUDIO_ID, menuSelectAudio);
   },
   setScene: (ctx: SetSceneCtx): void => {
     ctx.systemRegistry.registerRenderSystem(
