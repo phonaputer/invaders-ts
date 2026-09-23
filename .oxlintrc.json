@@ -16,7 +16,9 @@
     "eslint/max-params": "off", // This is violated by the wrapper around 2D rendering context, which is necessary.
     "eslint/no-continue": "off", // I prefer "continue" to "else" blocks because it decreases the total amount of indented blocks.
 
-    "typescript/prefer-for-of": "off" // For-of is slower and this is a 60fps game so I care about that.
+    "typescript/prefer-for-of": "off", // For-of is slower and this is a 60fps game so I care about that.
+
+    "unicorn/prefer-ternary": "off" // I find ternaries to be less readable.
   },
   "env": {
     "builtin": true

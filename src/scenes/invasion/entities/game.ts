@@ -78,7 +78,7 @@ export const setupGame = (ctx: SetupContext): void => {
 };
 
 const reSetupGame = (ctx: SetupContext): void => {
-  const highScore = HUD.highScore;
+  const { highScore } = HUD;
 
   resetWorld(ctx.world);
   resetActiveProjectileCount();

@@ -15,6 +15,7 @@ const setupTest = (): SpriteRenderingSystemTestSetup => ({
   ctx: {
     assetGetter: {
       getImage: vi.fn(),
+      getAudio: vi.fn(),
     },
     eventLog: new DefaultEventLog(),
     renderer: {

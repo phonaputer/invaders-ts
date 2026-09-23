@@ -38,8 +38,9 @@ interface NewBaseInvaderArgs {
 
 type OnDeleteFn = (ctx: TickCtx, entity: EntityId) => void;
 
-const onDelete = (score: number): OnDeleteFn => {
-  return (ctx: TickCtx, entity: EntityId): void => {
+const onDelete =
+  (score: number): OnDeleteFn =>
+  (ctx: TickCtx, entity: EntityId): void => {
     incrementScore(score);
 
     if (!hasComponent(ctx.world, entity, Position)) {
@@ -48,7 +49,6 @@ const onDelete = (score: number): OnDeleteFn => {
 
     newExplosion(ctx, { x: Position.x[entity]!, y: Position.y[entity]! });
   };
-};
 
 const newBaseInvader = (args: NewBaseInvaderArgs): EntityId => {
   const entity = addEntity(args.ctx.world);
