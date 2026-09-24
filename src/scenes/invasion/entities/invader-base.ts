@@ -1,12 +1,13 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import Damage from "@src/scenes/invasion/components/damage";
 import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import InvaderAnimation from "@src/scenes/invasion/components/invader-animation";
 import InvaderOrchestration from "@src/scenes/invasion/components/invader-orchestration";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
-import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
+import { ALIEN_EXPLOSION_AUDIO, SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import DamageType from "@src/scenes/invasion/damage-type";
 import newExplosion from "@src/scenes/invasion/entities/explosion";
 import { incrementScore } from "@src/scenes/invasion/entities/game";
@@ -48,6 +49,10 @@ const onDelete =
     }
 
     newExplosion(ctx, { x: Position.x[entity]!, y: Position.y[entity]! });
+
+    const audioEntity = addEntity(ctx.world);
+    addComponent(ctx.world, audioEntity, AudioStarted);
+    AudioStarted.id[audioEntity] = ALIEN_EXPLOSION_AUDIO;
   };
 
 const newBaseInvader = (args: NewBaseInvaderArgs): EntityId => {

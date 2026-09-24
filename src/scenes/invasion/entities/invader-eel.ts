@@ -5,11 +5,12 @@ import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeo
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Damage from "@src/scenes/invasion/components/damage";
 import DamageCallback from "@src/scenes/invasion/components/damage-callback";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
 import Velocity from "@src/scenes/invasion/components/velocity";
-import { SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
+import { ALIEN_EXPLOSION_AUDIO, SPRITE_SHEET_IMG_ID } from "@src/scenes/invasion/constants";
 import DamageType from "@src/scenes/invasion/damage-type";
 import newExplosion from "@src/scenes/invasion/entities/explosion";
 import { incrementScore } from "@src/scenes/invasion/entities/game";
@@ -54,6 +55,10 @@ const onDamage = (ctx: TickCtx, entity: EntityId): void => {
   }
 
   newExplosion(ctx, { x: Position.x[entity]!, y: Position.y[entity]! });
+
+  const audioEntity = addEntity(ctx.world);
+  addComponent(ctx.world, audioEntity, AudioStarted);
+  AudioStarted.id[audioEntity] = ALIEN_EXPLOSION_AUDIO;
 };
 
 const newEel = (ctx: NewEelContext): EntityId => {

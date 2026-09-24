@@ -1,15 +1,18 @@
 import { GAME_WIDTH } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
 import InvaderAnimation from "@src/scenes/invasion/components/invader-animation";
 import InvaderOrchestration from "@src/scenes/invasion/components/invader-orchestration";
 import Position from "@src/scenes/invasion/components/position";
 import InvaderOrchestrationState from "@src/scenes/invasion/components/singleton/invader-orchestration-state";
 import Pause from "@src/scenes/invasion/components/singleton/pause";
 import Sprite from "@src/scenes/invasion/components/sprite";
-import { GROUND_HEIGHT } from "@src/scenes/invasion/constants";
-import { query } from "bitecs";
+import { ARP1_AUDIO, ARP2_AUDIO, ARP3_AUDIO, ARP4_AUDIO, GROUND_HEIGHT } from "@src/scenes/invasion/constants";
+import { addComponent, addEntity, query } from "bitecs";
 
 export default class InvaderOrchestrationSystem {
+  private readonly arpSounds = [ARP1_AUDIO, ARP2_AUDIO, ARP3_AUDIO, ARP4_AUDIO];
+
   tick(ctx: TickCtx): void {
     if (Pause.paused) {
       return;
@@ -29,6 +32,7 @@ export default class InvaderOrchestrationSystem {
 
     this.moveInvaders(ctx, invaderCount);
     this.animateInvaders(ctx);
+    this.playArp(ctx);
   }
 
   private countInvaders(ctx: TickCtx): number {
@@ -133,6 +137,17 @@ export default class InvaderOrchestrationSystem {
 
       Sprite.srcX[entity] = frame.x * Sprite.srcW[entity]!;
       Sprite.srcY[entity] = frame.y * Sprite.srcH[entity]!;
+    }
+  }
+
+  private playArp(ctx: TickCtx): void {
+    const startAudio = addEntity(ctx.world);
+    addComponent(ctx.world, startAudio, AudioStarted);
+    AudioStarted.id[startAudio] = this.arpSounds[InvaderOrchestrationState.currentArpIndex]!;
+
+    InvaderOrchestrationState.currentArpIndex++;
+    if (InvaderOrchestrationState.currentArpIndex >= this.arpSounds.length) {
+      InvaderOrchestrationState.currentArpIndex = 0;
     }
   }
 }

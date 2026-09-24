@@ -1,8 +1,11 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeout";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
+import AudioStopped from "@src/scenes/invasion/components/events/audio-stopped";
 import Position from "@src/scenes/invasion/components/position";
 import HUD from "@src/scenes/invasion/components/singleton/hud";
 import Pause from "@src/scenes/invasion/components/singleton/pause";
+import { PLAYER_EXPLOSION_AUDIO } from "@src/scenes/invasion/constants";
 import setupFortreses from "@src/scenes/invasion/entities/fortress";
 import { scheduleEelSpawn } from "@src/scenes/invasion/entities/invader-eel";
 import setupInvaders from "@src/scenes/invasion/entities/invaders";
@@ -50,12 +53,23 @@ export const onPlayerDefeat = (ctx: TickCtx, entity: EntityId): void => {
   } else {
     CallbackOnTimeout.callback[respawnEntity] = respawn;
   }
+
+  const audioEntity = addEntity(ctx.world);
+  addComponent(ctx.world, audioEntity, AudioStarted);
+  AudioStarted.id[audioEntity] = PLAYER_EXPLOSION_AUDIO;
+};
+
+const stopExplosionAudio = (world: World): void => {
+  const audioEntity = addEntity(world);
+  addComponent(world, audioEntity, AudioStopped);
+  AudioStopped.id[audioEntity] = PLAYER_EXPLOSION_AUDIO;
 };
 
 const respawn = (ctx: TickCtx): void => {
   HUD.gameOver = false;
   Pause.paused = false;
   newPlayer(ctx);
+  stopExplosionAudio(ctx.world);
 };
 
 interface SetupContext {
@@ -86,4 +100,6 @@ const reSetupGame = (ctx: SetupContext): void => {
   setupGame(ctx);
 
   HUD.highScore = highScore;
+
+  stopExplosionAudio(ctx.world);
 };
