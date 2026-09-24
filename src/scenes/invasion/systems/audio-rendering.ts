@@ -1,8 +1,8 @@
 import type { RenderCtx } from "@src/framework/render-system";
-import type PlayAudio from "@src/scenes/invasion/events/play-audio";
-import { PLAY_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/events/play-audio";
-import type StopAudio from "@src/scenes/invasion/events/stop-audio";
-import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/events/stop-audio";
+import type PlayAudio from "@src/scenes/invasion/components/events/play-audio";
+import { PLAY_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/play-audio";
+import type StopAudio from "@src/scenes/invasion/components/events/stop-audio";
+import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/stop-audio";
 
 export default class AudioRenderingSystem {
   render(ctx: RenderCtx): void {

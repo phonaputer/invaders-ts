@@ -2,8 +2,8 @@ import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
+import { COLLISION_EVENT_TYPE, type default as Collision } from "@src/scenes/invasion/components/events/collision";
 import Position from "@src/scenes/invasion/components/position";
-import { COLLISION_EVENT_TYPE, type default as Collision } from "@src/scenes/invasion/events/collision";
 import { query, type EntityId } from "bitecs";
 
 const BUCKET_WIDTH = 15;

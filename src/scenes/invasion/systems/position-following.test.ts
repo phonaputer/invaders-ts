@@ -1,4 +1,3 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import Position from "@src/scenes/invasion/components/position";
 import PositionFollowing from "@src/scenes/invasion/components/position-following";
@@ -16,7 +15,6 @@ const setupTest = (): PositionFollowingTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

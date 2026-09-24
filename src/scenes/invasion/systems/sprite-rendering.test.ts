@@ -1,4 +1,3 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { RenderCtx } from "@src/framework/render-system";
 import Position from "@src/scenes/invasion/components/position";
 import Sprite from "@src/scenes/invasion/components/sprite";
@@ -17,7 +16,6 @@ const setupTest = (): SpriteRenderingSystemTestSetup => ({
       getImage: vi.fn(),
       getAudio: vi.fn(),
     },
-    eventLog: new DefaultEventLog(),
     renderer: {
       drawImage: vi.fn(),
       drawLine: vi.fn(),

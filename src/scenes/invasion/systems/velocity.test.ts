@@ -1,5 +1,4 @@
 import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import Position from "@src/scenes/invasion/components/position";
 import Pause from "@src/scenes/invasion/components/singleton/pause";
@@ -18,7 +17,6 @@ const setupTest = (): VelocitySystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

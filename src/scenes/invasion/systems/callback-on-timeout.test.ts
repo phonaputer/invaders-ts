@@ -1,4 +1,3 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import CallbackOnTimeout from "@src/scenes/invasion/components/callback-on-timeout";
 import CallbackOnTimeoutSystem from "@src/scenes/invasion/systems/callback-on-timeout";
@@ -14,7 +13,6 @@ const setupTest = (): CallbackOnTimeoutSystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

@@ -1,4 +1,3 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
@@ -16,7 +15,6 @@ const setupTest = (): DeletionSystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

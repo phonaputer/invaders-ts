@@ -1,9 +1,8 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
+import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/components/events/collision";
 import Position from "@src/scenes/invasion/components/position";
-import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/events/collision";
 import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
 import { addComponent, addEntity, createWorld, type EntityId } from "bitecs";
 import { expect, test, vi } from "vitest";
@@ -17,7 +16,6 @@ const setupTest = (): CollisionDetectionSystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

@@ -2,6 +2,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Damage from "@src/scenes/invasion/components/damage";
 import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
+import { PLAY_AUDIO_EVENT_TYPE, type default as PlayAudio } from "@src/scenes/invasion/components/events/play-audio";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasion/components/player-attack";
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
@@ -12,7 +13,6 @@ import DamageType from "@src/scenes/invasion/damage-type";
 import { onPlayerDefeat } from "@src/scenes/invasion/entities/game";
 import newPlayerMuzzleFlash from "@src/scenes/invasion/entities/player-muzzle-flash";
 import newPlayerProjectile, { activeProjectileCount } from "@src/scenes/invasion/entities/player-projectile";
-import { PLAY_AUDIO_EVENT_TYPE, type default as PlayAudio } from "@src/scenes/invasion/events/play-audio";
 import { addComponent, addEntity, type World } from "bitecs";
 
 interface NewPlayerContext {

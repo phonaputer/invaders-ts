@@ -1,11 +1,10 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import Damage from "@src/scenes/invasion/components/damage";
 import DamageCallback from "@src/scenes/invasion/components/damage-callback";
+import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/components/events/collision";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
 import DamageType from "@src/scenes/invasion/damage-type";
-import { type default as Collision, COLLISION_EVENT_TYPE } from "@src/scenes/invasion/events/collision";
 import DamageSystem from "@src/scenes/invasion/systems/damage";
 import { addComponent, addEntity, createWorld, hasComponent } from "bitecs";
 import { expect, test, vi } from "vitest";
@@ -19,7 +18,6 @@ const setupTest = (): DamageSystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

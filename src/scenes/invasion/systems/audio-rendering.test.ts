@@ -1,9 +1,7 @@
 import type { Audio } from "@src/framework/asset-getter";
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { RenderCtx } from "@src/framework/render-system";
-import { PLAY_AUDIO_EVENT_TYPE, type default as PlayAudio } from "@src/scenes/invasion/events/play-audio";
-import type StopAudio from "@src/scenes/invasion/events/stop-audio";
-import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/events/stop-audio";
+import { PLAY_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/play-audio";
+import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/stop-audio";
 import AudioRenderingSystem from "@src/scenes/invasion/systems/audio-rendering";
 import { createWorld } from "bitecs";
 import { expect, test, vi } from "vitest";
@@ -21,7 +19,6 @@ const setupTest = (): AudioRenderingSystemTestSetup => ({
       getImage: vi.fn(),
       getAudio: vi.fn(),
     },
-    eventLog: new DefaultEventLog(),
     renderer: {
       drawImage: vi.fn(),
       drawLine: vi.fn(),

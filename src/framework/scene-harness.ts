@@ -1,7 +1,6 @@
 import AssetAwareRenderer, { type AssetUnawareRenderer } from "@src/framework/asset-aware-renderer";
 import AssetRegistry from "@src/framework/asset-registry";
 import { MS_PER_TICK } from "@src/framework/constants";
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { RenderSystem } from "@src/framework/render-system";
 import type Scene from "@src/framework/scene";
 import type SceneSetter from "@src/framework/scene-setter";
@@ -11,7 +10,6 @@ import { type World, createWorld } from "bitecs";
 
 export class SceneHarness {
   private readonly assetRegistry: AssetRegistry;
-  private readonly eventLog: DefaultEventLog;
   private readonly renderer: AssetAwareRenderer;
   private readonly scene: Scene;
   private readonly sceneSetter: SceneSetter;
@@ -27,7 +25,6 @@ export class SceneHarness {
 
   constructor(scene: Scene, renderer: AssetUnawareRenderer, sceneSetter: SceneSetter) {
     this.assetRegistry = new AssetRegistry();
-    this.eventLog = new DefaultEventLog();
     this.renderer = new AssetAwareRenderer(renderer, this.assetRegistry);
     this.scene = scene;
     this.sceneSetter = sceneSetter;
@@ -50,11 +47,8 @@ export class SceneHarness {
     this.untickedMs += elapsedMs;
 
     this.userInput.recordInput();
-    this.eventLog.clearRender();
 
     while (this.untickedMs >= MS_PER_TICK) {
-      this.eventLog.clearTick();
-
       this.untickedMs -= MS_PER_TICK;
       const thisTickAbsoluteMs = currentMs - this.untickedMs;
 
@@ -69,7 +63,6 @@ export class SceneHarness {
       this.tickSystems[i]!.tick({
         currentMs,
         deltaMs,
-        eventLog: this.eventLog,
         sceneSetter: this.sceneSetter,
         userInput: this.userInput,
         world: this.world,
@@ -83,7 +76,6 @@ export class SceneHarness {
     for (let i = 0; i < this.renderSystems.length; i++) {
       this.renderSystems[i]!.render({
         assetGetter: this.assetRegistry,
-        eventLog: this.eventLog,
         renderer: this.renderer,
         world: this.world,
       });
