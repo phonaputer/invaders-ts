@@ -34,7 +34,11 @@ import arp4Audio from "@src/scenes/invasion/assets/arp4.wav";
 import playerExplosionAudio from "@src/scenes/invasion/assets/player_explosion.wav";
 import playerShotAudio from "@src/scenes/invasion/assets/player_shot.wav";
 import spriteSheetImage from "@src/scenes/invasion/assets/space_invaders.png";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
+import AudioStopped from "@src/scenes/invasion/components/events/audio-stopped";
+import CollisionOccurred from "@src/scenes/invasion/components/events/collision-occurred";
 import AudioRenderingSystem from "@src/scenes/invasion/systems/audio-rendering";
+import EventClearingSystem from "@src/scenes/invasion/systems/event-clearing";
 
 const InvasionScene = {
   loadAssets: (ctx: LoadAssetsCtx): void => {
@@ -64,6 +68,14 @@ const InvasionScene = {
     ctx.systemRegistry.registerRenderSystem(new SpriteRenderingSystem());
     ctx.systemRegistry.registerRenderSystem(new HUDRenderingSystem(new SpriteTextRenderer(SPRITE_SHEET_IMG_ID)));
     ctx.systemRegistry.registerRenderSystem(new AudioRenderingSystem());
+
+    const eventClearingSystem = new EventClearingSystem({
+      tickEvents: [CollisionOccurred],
+      renderEvents: [AudioStarted, AudioStopped],
+    });
+
+    ctx.systemRegistry.registerTickSystem(eventClearingSystem);
+    ctx.systemRegistry.registerRenderSystem(eventClearingSystem);
 
     setupGame(ctx);
   },
