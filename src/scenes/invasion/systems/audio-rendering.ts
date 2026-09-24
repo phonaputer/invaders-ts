@@ -1,23 +1,21 @@
 import type { RenderCtx } from "@src/framework/render-system";
-import type PlayAudio from "@src/scenes/invasion/components/events/play-audio";
-import { PLAY_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/play-audio";
-import type StopAudio from "@src/scenes/invasion/components/events/stop-audio";
-import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/stop-audio";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
+import AudioStopped from "@src/scenes/invasion/components/events/audio-stopped";
+import { query } from "bitecs";
 
 export default class AudioRenderingSystem {
   render(ctx: RenderCtx): void {
     const soundsToPlay = new Set<string>();
     const soundsToStop = new Set<string>();
 
-    for (const rawEvent of ctx.eventLog.getRender(STOP_AUDIO_EVENT_TYPE)) {
-      const event = rawEvent as StopAudio;
-      soundsToStop.add(event.id);
+    for (const entity of query(ctx.world, [AudioStopped])) {
+      soundsToStop.add(AudioStopped.id[entity]!);
     }
 
-    for (const rawEvent of ctx.eventLog.getRender(PLAY_AUDIO_EVENT_TYPE)) {
-      const event = rawEvent as PlayAudio;
-      if (!soundsToStop.has(event.id)) {
-        soundsToPlay.add(event.id);
+    for (const entity of query(ctx.world, [AudioStarted])) {
+      const id = AudioStarted.id[entity]!;
+      if (!soundsToStop.has(id)) {
+        soundsToPlay.add(id);
       }
     }
 

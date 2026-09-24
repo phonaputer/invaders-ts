@@ -1,4 +1,3 @@
-import DefaultEventLog from "@src/framework/default-event-log";
 import type { TickCtx } from "@src/framework/tick-system";
 import Animation from "@src/scenes/invasion/components/animation";
 import AnimationUnpausable from "@src/scenes/invasion/components/animation-unpausable";
@@ -17,7 +16,6 @@ const setupTest = (): AnimationSystemTestSetup => ({
   ctx: {
     currentMs: 0,
     deltaMs: 1,
-    eventLog: new DefaultEventLog(),
     sceneSetter: {
       setScene: vi.fn(),
     },

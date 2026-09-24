@@ -1,10 +1,10 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
-import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/components/events/collision";
+import CollisionOccurred from "@src/scenes/invasion/components/events/collision-occurred";
 import Position from "@src/scenes/invasion/components/position";
 import CollisionDetectionSystem from "@src/scenes/invasion/systems/collision-detection";
-import { addComponent, addEntity, createWorld, type EntityId } from "bitecs";
+import { addComponent, addEntity, createWorld, query, removeEntity, type EntityId } from "bitecs";
 import { expect, test, vi } from "vitest";
 
 interface CollisionDetectionSystemTestSetup {
@@ -62,25 +62,44 @@ const createEntityWithHitbox = (ctx: TickCtx, hitbox: Hitbox, passive = false): 
 };
 
 const expectTotalHits = (ctx: TickCtx, expected: number) => {
-  expect(ctx.eventLog.getTick(COLLISION_EVENT_TYPE).length).toBe(expected * 2);
+  const collisions = query(ctx.world, [CollisionOccurred]);
+
+  expect(collisions.length).toBe(expected * 2);
 };
 
 const expectCollided = (ctx: TickCtx, left: EntityId, right: EntityId): void => {
-  const collisions = ctx.eventLog.getTick(COLLISION_EVENT_TYPE);
+  let leftCount = 0;
+  let rightCount = 0;
 
-  expect(collisions).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({ entity: left, other: right }),
-      expect.objectContaining({ entity: right, other: left }),
-    ]),
-  );
+  for (const entity of query(ctx.world, [CollisionOccurred])) {
+    if (CollisionOccurred.entity[entity] === left && CollisionOccurred.other[entity] === right) {
+      leftCount++;
+    }
+    if (CollisionOccurred.entity[entity] === right && CollisionOccurred.other[entity] === left) {
+      rightCount++;
+    }
+  }
+
+  expect(leftCount).toBe(1);
+  expect(rightCount).toBe(1);
 };
 
 const expectDidNotCollide = (ctx: TickCtx, entity: EntityId): void => {
-  const collisions = ctx.eventLog.getTick(COLLISION_EVENT_TYPE);
+  let count = 0;
 
-  expect(collisions).not.toEqual(expect.arrayContaining([expect.objectContaining({ entity })]));
-  expect(collisions).not.toEqual(expect.arrayContaining([expect.objectContaining({ other: entity })]));
+  for (const collisions of query(ctx.world, [CollisionOccurred])) {
+    if (CollisionOccurred.entity[collisions] === entity || CollisionOccurred.other[collisions] === entity) {
+      count++;
+    }
+  }
+
+  expect(count).toBe(0);
+};
+
+const clearLoggedCollisions = (ctx: TickCtx): void => {
+  for (const entity of query(ctx.world, [CollisionOccurred])) {
+    removeEntity(ctx.world, entity);
+  }
 };
 
 test("entities exactly overlap, should log collision", () => {
@@ -332,4 +351,33 @@ test("multiple active and passive entities overlap, only overlaps involving an a
   expectCollided(ctx, entityOne, entityFour);
   expectCollided(ctx, entityTwo, entityThree);
   expectCollided(ctx, entityTwo, entityFour);
+});
+
+test("entities still collide on subsequent ticks, should log collision", () => {
+  const { ctx, system } = setupTest();
+  const entityOne = createEntityWithHitbox(ctx, { x: 1, y: 1, w: 1, h: 1 });
+  const entityTwo = createEntityWithHitbox(ctx, { x: 1, y: 1, w: 1, h: 1 });
+
+  system.tick(ctx);
+  clearLoggedCollisions(ctx);
+  system.tick(ctx);
+
+  expectCollided(ctx, entityOne, entityTwo);
+});
+
+test("entities no longer collide on subsequent ticks, should not log collision", () => {
+  const { ctx, system } = setupTest();
+  const entityOne = createEntityWithHitbox(ctx, { x: 1, y: 1, w: 1, h: 1 });
+  const entityTwo = createEntityWithHitbox(ctx, { x: 1, y: 1, w: 1, h: 1 });
+
+  system.tick(ctx);
+
+  Position.x[entityOne] = 100;
+  Position.y[entityOne] = 100;
+  clearLoggedCollisions(ctx);
+
+  system.tick(ctx);
+
+  expectDidNotCollide(ctx, entityOne);
+  expectDidNotCollide(ctx, entityTwo);
 });

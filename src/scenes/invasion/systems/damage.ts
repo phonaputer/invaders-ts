@@ -1,33 +1,34 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import Damage from "@src/scenes/invasion/components/damage";
 import DamageCallback from "@src/scenes/invasion/components/damage-callback";
-import { type default as Collision, COLLISION_EVENT_TYPE } from "@src/scenes/invasion/components/events/collision";
+import CollisionOccurred from "@src/scenes/invasion/components/events/collision-occurred";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
-import { addComponent, hasComponent } from "bitecs";
+import { addComponent, hasComponent, query } from "bitecs";
 
 // This must be executed before the deletion system in a tick since it assumes entity existence.
 export default class DamageSystem {
   tick(ctx: TickCtx): void {
-    for (const event of ctx.eventLog.getTick(COLLISION_EVENT_TYPE)) {
-      const collision = event as Collision;
+    for (const collision of query(ctx.world, [CollisionOccurred])) {
+      const entity = CollisionOccurred.entity[collision]!;
+      const other = CollisionOccurred.other[collision]!;
 
-      if (!hasComponent(ctx.world, collision.entity, Damage) || !hasComponent(ctx.world, collision.other, Hitpoints)) {
+      if (!hasComponent(ctx.world, entity, Damage) || !hasComponent(ctx.world, other, Hitpoints)) {
         continue;
       }
 
-      if ((Damage.type[collision.entity]! & Hitpoints.susceptibleToDamageType[collision.other]!) < 1) {
+      if ((Damage.type[entity]! & Hitpoints.susceptibleToDamageType[other]!) < 1) {
         continue;
       }
 
-      if (hasComponent(ctx.world, collision.other, DamageCallback)) {
-        DamageCallback.callback[collision.other]!(ctx, collision.other, Damage.amount[collision.entity]!);
+      if (hasComponent(ctx.world, other, DamageCallback)) {
+        DamageCallback.callback[other]!(ctx, other, Damage.amount[entity]!);
       }
 
-      Hitpoints.current[collision.other]! -= Damage.amount[collision.entity]!;
+      Hitpoints.current[other]! -= Damage.amount[entity]!;
 
-      if (Hitpoints.current[collision.other]! < 1) {
-        addComponent(ctx.world, collision.other, ToBeDeleted);
+      if (Hitpoints.current[other]! < 1) {
+        addComponent(ctx.world, other, ToBeDeleted);
       }
     }
   }

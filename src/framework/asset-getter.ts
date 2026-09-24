@@ -1,7 +1,7 @@
 export interface Audio {
   currentTime: number;
-  play(): Promise<void>;
-  pause(): void;
+  play: () => Promise<void>;
+  pause: () => void;
 }
 
 export default interface AssetGetter {

@@ -1,12 +1,12 @@
 import type { TickCtx } from "@src/framework/tick-system";
 import Damage from "@src/scenes/invasion/components/damage";
 import DamageCallback from "@src/scenes/invasion/components/damage-callback";
-import { COLLISION_EVENT_TYPE } from "@src/scenes/invasion/components/events/collision";
+import CollisionOccurred from "@src/scenes/invasion/components/events/collision-occurred";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import ToBeDeleted from "@src/scenes/invasion/components/to-be-deleted";
 import DamageType from "@src/scenes/invasion/damage-type";
 import DamageSystem from "@src/scenes/invasion/systems/damage";
-import { addComponent, addEntity, createWorld, hasComponent } from "bitecs";
+import { addComponent, addEntity, createWorld, hasComponent, type EntityId } from "bitecs";
 import { expect, test, vi } from "vitest";
 
 interface DamageSystemTestSetup {
@@ -30,6 +30,14 @@ const setupTest = (): DamageSystemTestSetup => ({
   system: new DamageSystem(),
 });
 
+const collide = (ctx: TickCtx, entity: EntityId, other: EntityId): void => {
+  const collision = addEntity(ctx.world);
+
+  addComponent(ctx.world, collision, CollisionOccurred);
+  CollisionOccurred.entity[collision] = entity;
+  CollisionOccurred.other[collision] = other;
+};
+
 test("entity does not have Damage component, collision skipped with no error", () => {
   const { ctx, system } = setupTest();
 
@@ -40,8 +48,7 @@ test("entity does not have Damage component, collision skipped with no error", (
   Hitpoints.current[other] = 10;
   Hitpoints.susceptibleToDamageType[other] = DamageType.Alien | DamageType.AlienProjectile;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 
@@ -58,8 +65,7 @@ test("other does not have Hitpoints component, collision skipped with no error",
 
   const other = addEntity(ctx.world);
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 });
@@ -77,8 +83,7 @@ test("other not susceptible to damage type of entity, other takes no damage", ()
   Hitpoints.current[other] = 10;
   Hitpoints.susceptibleToDamageType[other] = DamageType.Alien | DamageType.AlienProjectile;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 
@@ -98,8 +103,7 @@ test("other susceptible to damage type of entity, other takes damage", () => {
   Hitpoints.current[other] = 10;
   Hitpoints.susceptibleToDamageType[other] = DamageType.Alien | DamageType.AlienProjectile;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 
@@ -119,8 +123,7 @@ test("other takes damage reducing it to 0 hitpoints, other marked as deleted", (
   Hitpoints.current[other] = 10;
   Hitpoints.susceptibleToDamageType[other] = DamageType.Alien | DamageType.AlienProjectile;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 
@@ -141,8 +144,7 @@ test("other takes damage reducing it to negative hitpoints, other marked as dele
   Hitpoints.current[other] = 10;
   Hitpoints.susceptibleToDamageType[other] = DamageType.Alien | DamageType.AlienProjectile;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 
@@ -166,8 +168,7 @@ test("other takes damage and has DamageCallback, callback is invoked", () => {
   const callbackFn = vi.fn();
   DamageCallback.callback[other] = callbackFn;
 
-  const collision: Collision = { entity, other };
-  ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, collision);
+  collide(ctx, entity, other);
 
   system.tick(ctx);
 

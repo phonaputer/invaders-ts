@@ -2,7 +2,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Damage from "@src/scenes/invasion/components/damage";
 import DeletionCallback from "@src/scenes/invasion/components/deletion-callback";
-import { PLAY_AUDIO_EVENT_TYPE, type default as PlayAudio } from "@src/scenes/invasion/components/events/play-audio";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
 import Hitpoints from "@src/scenes/invasion/components/hitpoints";
 import PlayerAttack, { type PlayerAttackCallbackArgs } from "@src/scenes/invasion/components/player-attack";
 import PlayerMovement from "@src/scenes/invasion/components/player-movement";
@@ -82,8 +82,9 @@ const standardWeaponCallback = ({ ctx, entity, x, y }: PlayerAttackCallbackArgs)
   newPlayerProjectile(ctx, { x, y });
   newPlayerMuzzleFlash(ctx, entity);
 
-  const event: PlayAudio = { id: PLAYER_ATTACK_AUDIO };
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
+  const startAudio = addEntity(ctx.world);
+  addComponent(ctx.world, startAudio, AudioStarted);
+  AudioStarted.id[startAudio] = PLAYER_ATTACK_AUDIO;
 };
 
 export default newPlayer;

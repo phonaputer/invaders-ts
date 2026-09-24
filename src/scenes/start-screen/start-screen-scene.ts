@@ -12,8 +12,6 @@ import spriteSheetSrc from "@src/scenes/invasion/assets/space_invaders.png";
 const SPRITE_SHEET_IMG_ID = "spritesheet";
 const MENU_SELECT_AUDIO_ID = "menu-select";
 
-const SPACE_ENGAGED_EVENT = "space-engaged";
-
 const SPACE_TO_SCENE_SWAP_MS = 750;
 let spaceEngagedTime = 0;
 
@@ -21,6 +19,8 @@ const BLINK_MS = 50;
 let isBlinkingTextVisible = true;
 let lastBlinkMs = 0;
 let blinkEngaged = false;
+
+let playSelectSound = false;
 
 interface TextRenderer {
   renderTextCentered: (renderer: Renderer, y: number, text: string) => void;
@@ -60,8 +60,9 @@ class RenderSystem {
       this.textRenderer.renderTextCentered(ctx.renderer, 220, "press <space> to begin");
     }
 
-    if (ctx.eventLog.getRender(SPACE_ENGAGED_EVENT).length > 0) {
+    if (playSelectSound) {
       ctx.assetGetter.getAudio(MENU_SELECT_AUDIO_ID)?.play();
+      playSelectSound = false;
     }
   }
 }
@@ -81,7 +82,7 @@ class TickSystem {
       if (ctx.userInput.initiated(Input.Fire)) {
         blinkEngaged = true;
         spaceEngagedTime = ctx.currentMs;
-        ctx.eventLog.pushRender(SPACE_ENGAGED_EVENT, true);
+        playSelectSound = true;
       }
     }
   }

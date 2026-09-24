@@ -1,9 +1,9 @@
 import type { Audio } from "@src/framework/asset-getter";
 import type { RenderCtx } from "@src/framework/render-system";
-import { PLAY_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/play-audio";
-import { STOP_AUDIO_EVENT_TYPE } from "@src/scenes/invasion/components/events/stop-audio";
+import AudioStarted from "@src/scenes/invasion/components/events/audio-started";
+import AudioStopped from "@src/scenes/invasion/components/events/audio-stopped";
 import AudioRenderingSystem from "@src/scenes/invasion/systems/audio-rendering";
-import { createWorld } from "bitecs";
+import { addComponent, addEntity, createWorld } from "bitecs";
 import { expect, test, vi } from "vitest";
 
 const DEFAULT_AUDIO_TIME = 100;
@@ -29,19 +29,30 @@ const setupTest = (): AudioRenderingSystemTestSetup => ({
   system: new AudioRenderingSystem(),
 });
 
-const mockAudio = (): Audio => {
-  return {
-    currentTime: DEFAULT_AUDIO_TIME,
-    play: vi.fn(),
-    pause: vi.fn(),
-  };
+const mockAudio = (): Audio => ({
+  currentTime: DEFAULT_AUDIO_TIME,
+  play: vi.fn(),
+  pause: vi.fn(),
+});
+
+const start = (ctx: RenderCtx, id: string): void => {
+  const entity = addEntity(ctx.world);
+
+  addComponent(ctx.world, entity, AudioStarted);
+  AudioStarted.id[entity] = id;
+};
+
+const stop = (ctx: RenderCtx, id: string): void => {
+  const entity = addEntity(ctx.world);
+
+  addComponent(ctx.world, entity, AudioStopped);
+  AudioStopped.id[entity] = id;
 };
 
 test("sound is requested to be played, it is played", () => {
   const { ctx, system } = setupTest();
 
-  const event: PlayAudio = { id: "id123" };
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
+  start(ctx, "id123");
 
   const audio = mockAudio();
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(audio);
@@ -55,10 +66,9 @@ test("sound is requested to be played, it is played", () => {
 test("sound is requested to be played multiple times, it is played once", () => {
   const { ctx, system } = setupTest();
 
-  const event: PlayAudio = { id: "id123" };
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
+  start(ctx, "id123");
+  start(ctx, "id123");
+  start(ctx, "id123");
 
   const audio = mockAudio();
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(audio);
@@ -73,8 +83,7 @@ test("sound is requested to be played multiple times, it is played once", () => 
 test("sound is requested to be stopped, it is stopped", () => {
   const { ctx, system } = setupTest();
 
-  const event: StopAudio = { id: "id123" };
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, event);
+  stop(ctx, "id123");
 
   const audio = mockAudio();
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(audio);
@@ -88,10 +97,9 @@ test("sound is requested to be stopped, it is stopped", () => {
 test("sound is requested to be stopped multiple times, it is stopped once", () => {
   const { ctx, system } = setupTest();
 
-  const event: StopAudio = { id: "id123" };
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, event);
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, event);
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, event);
+  stop(ctx, "id123");
+  stop(ctx, "id123");
+  stop(ctx, "id123");
 
   const audio = mockAudio();
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(audio);
@@ -106,10 +114,8 @@ test("sound is requested to be stopped multiple times, it is stopped once", () =
 test("sound is requested to be played & stopped, it is stopped not played", () => {
   const { ctx, system } = setupTest();
 
-  const eventPlay: PlayAudio = { id: "id123" };
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, eventPlay);
-  const eventStop: StopAudio = { id: "id123" };
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, eventStop);
+  start(ctx, "id123");
+  stop(ctx, "id123");
 
   const audio = mockAudio();
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(audio);
@@ -124,8 +130,7 @@ test("sound is requested to be played & stopped, it is stopped not played", () =
 test("non-existent sound is requested to be played, no error", () => {
   const { ctx, system } = setupTest();
 
-  const event: PlayAudio = { id: "id123" };
-  ctx.eventLog.pushRender(PLAY_AUDIO_EVENT_TYPE, event);
+  start(ctx, "id123");
 
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(undefined);
 
@@ -135,8 +140,7 @@ test("non-existent sound is requested to be played, no error", () => {
 test("non-existent sound is requested to be stopped, no error", () => {
   const { ctx, system } = setupTest();
 
-  const event: StopAudio = { id: "id123" };
-  ctx.eventLog.pushRender(STOP_AUDIO_EVENT_TYPE, event);
+  stop(ctx, "id123");
 
   vi.mocked(ctx.assetGetter.getAudio).mockReturnValue(undefined);
 

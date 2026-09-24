@@ -2,9 +2,9 @@ import { GAME_HEIGHT, GAME_WIDTH } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
 import CollisionActive from "@src/scenes/invasion/components/collision-active";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
-import { COLLISION_EVENT_TYPE, type default as Collision } from "@src/scenes/invasion/components/events/collision";
+import CollisionOccurred from "@src/scenes/invasion/components/events/collision-occurred";
 import Position from "@src/scenes/invasion/components/position";
-import { query, type EntityId } from "bitecs";
+import { addComponent, addEntity, query, type EntityId } from "bitecs";
 
 const BUCKET_WIDTH = 15;
 const BUCKET_HEIGHT = 15;
@@ -31,6 +31,7 @@ interface Bucket {
 export default class CollisionDetectionSystem {
   private readonly bucketsToCheck = new Map<string, Bucket>();
   private readonly hitboxBuckets = [] as Hitbox[][][];
+  private readonly collisionsThisTick = new Set<string>();
 
   constructor() {
     const xBuckets = Math.ceil(GAME_WIDTH / BUCKET_WIDTH) + NUM_NEGATIVE_X_BUCKETS + NUM_POSITIVE_OFFSCREEN_X_BUCKETS;
@@ -48,6 +49,7 @@ export default class CollisionDetectionSystem {
   }
 
   tick(ctx: TickCtx): void {
+    this.collisionsThisTick.clear();
     this.clearBuckets();
     this.fillBuckets(ctx);
 
@@ -139,17 +141,23 @@ export default class CollisionDetectionSystem {
   }
 
   private logCollision(ctx: TickCtx, left: EntityId, right: EntityId): void {
-    const rightEvent: Collision = {
-      entity: right,
-      other: left,
-    };
-    const leftEvent: Collision = {
-      entity: left,
-      other: right,
-    };
+    const leftRightKey = `${left}:${right}`;
+    if (this.collisionsThisTick.has(leftRightKey)) {
+      return;
+    }
+    const rightLeftKey = `${right}:${left}`;
+    this.collisionsThisTick.add(leftRightKey);
+    this.collisionsThisTick.add(rightLeftKey);
 
-    ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, rightEvent);
-    ctx.eventLog.pushTick(COLLISION_EVENT_TYPE, leftEvent);
+    const rightCollisionEntity = addEntity(ctx.world);
+    addComponent(ctx.world, rightCollisionEntity, CollisionOccurred);
+    CollisionOccurred.entity[rightCollisionEntity] = right;
+    CollisionOccurred.other[rightCollisionEntity] = left;
+
+    const leftCollisionEntity = addEntity(ctx.world);
+    addComponent(ctx.world, leftCollisionEntity, CollisionOccurred);
+    CollisionOccurred.entity[leftCollisionEntity] = left;
+    CollisionOccurred.other[leftCollisionEntity] = right;
   }
 
   private areTouching(left: Hitbox, right: Hitbox): boolean {
