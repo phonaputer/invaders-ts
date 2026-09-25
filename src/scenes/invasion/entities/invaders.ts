@@ -23,8 +23,8 @@ const onAttack = (ctx: TickCtx): void => {
 };
 
 const STARTING_X = 2;
-const ALIEN_WIDTH = 14;
-const ALIEN_HEIGHT = 14;
+const ALIEN_WIDTH = 16;
+const ALIEN_HEIGHT = 16;
 const COL_SPACING = 2;
 const ROW_SPACING = -1.2;
 

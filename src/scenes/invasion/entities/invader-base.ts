@@ -78,8 +78,8 @@ const newBaseInvader = (args: NewBaseInvaderArgs): EntityId => {
   addComponent(args.ctx.world, entity, Position);
   Position.x[entity] = args.x;
   Position.y[entity] = args.y;
-  Position.w[entity] = 14;
-  Position.h[entity] = 14;
+  Position.w[entity] = 16;
+  Position.h[entity] = 16;
 
   addComponent(args.ctx.world, entity, Sprite);
   Sprite.image[entity] = SPRITE_SHEET_IMG_ID;
@@ -87,8 +87,8 @@ const newBaseInvader = (args: NewBaseInvaderArgs): EntityId => {
   Sprite.srcY[entity] = 16 * args.strip[0]!.y;
   Sprite.srcW[entity] = 16;
   Sprite.srcH[entity] = 16;
-  Sprite.dstW[entity] = 14;
-  Sprite.dstH[entity] = 14;
+  Sprite.dstW[entity] = 16;
+  Sprite.dstH[entity] = 16;
 
   return entity;
 };

@@ -1,3 +1,4 @@
+import { GAME_WIDTH } from "@src/framework/constants";
 import type { TickCtx } from "@src/framework/tick-system";
 import CollisionPassive from "@src/scenes/invasion/components/collision-passive";
 import Damage from "@src/scenes/invasion/components/damage";
@@ -94,11 +95,21 @@ const newFortress = ({ ctx, x, y }: NewFortressArgs): void => {
   }
 };
 
+const FORTRESS_Y = 235;
+const FORTRESS_WIDTH = 24;
+const FORTRESS_X_SPACING = 28;
+const NUM_FORTRESSES = 4;
+
 const setupFortreses = (ctx: NewFortressContext): void => {
-  newFortress({ ctx, x: 29, y: 235 });
-  newFortress({ ctx, x: 72, y: 235 });
-  newFortress({ ctx, x: 119, y: 235 });
-  newFortress({ ctx, x: 166, y: 235 });
+  const xSpaceTakenUpByForts = FORTRESS_WIDTH * NUM_FORTRESSES + FORTRESS_X_SPACING * (NUM_FORTRESSES - 1);
+  const remainingXSpace = GAME_WIDTH - xSpaceTakenUpByForts;
+
+  let x = Math.trunc(remainingXSpace / 2);
+
+  for (let i = 0; i < NUM_FORTRESSES; i++) {
+    newFortress({ ctx, x, y: FORTRESS_Y });
+    x += FORTRESS_WIDTH + FORTRESS_X_SPACING;
+  }
 };
 
 export default setupFortreses;
