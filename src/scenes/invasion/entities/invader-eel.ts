@@ -106,7 +106,7 @@ const newEel = (ctx: NewEelContext): EntityId => {
 
   addComponent(ctx.world, entity, Sprite);
   Sprite.image[entity] = SPRITE_SHEET_IMG_ID;
-  Sprite.srcX[entity] = 16 * strip[0]!.x;
+  Sprite.srcX[entity] = 24 * strip[0]!.x;
   Sprite.srcY[entity] = 16 * strip[0]!.y;
   Sprite.srcW[entity] = 24;
   Sprite.srcH[entity] = 16;
