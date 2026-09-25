@@ -40,6 +40,7 @@ export class SceneHarness {
         world: this.world,
       });
       this.setScene = true;
+      this.previousFrameMs = currentMs;
     }
 
     const elapsedMs = currentMs - this.previousFrameMs;
