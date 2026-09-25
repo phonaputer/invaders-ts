@@ -75,9 +75,9 @@ const newInvaderProjectile = (ctx: NewProjectileContext, position: Position): vo
   Sprite.srcX[entity] = 80;
   Sprite.srcY[entity] = 32;
   Sprite.srcW[entity] = 16;
-  Sprite.srcH[entity] = 16;
+  Sprite.srcH[entity] = 15;
   Sprite.dstW[entity] = 16;
-  Sprite.dstH[entity] = 16;
+  Sprite.dstH[entity] = 15;
 
   addComponent(ctx.world, entity, Velocity);
   Velocity.x[entity] = 0;
