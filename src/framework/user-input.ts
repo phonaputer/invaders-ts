@@ -37,6 +37,7 @@ export class BrowserInputWatcher {
         const input = this.browserKeysToInputs[e.key];
         if (input !== undefined) {
           this.currentlyPressedKeys.add(input);
+          e.preventDefault();
         }
       },
       { signal: this.abortController.signal },

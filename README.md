@@ -12,6 +12,8 @@ _This means any crap code is entirely my own fault._ 😉
 This is a knockoff of the classic Taito game _Space Invaders_ written in [Typescript](https://www.typescriptlang.org/)
 using HTML5 canvas and [BitECS](https://bitecs.dev/) for the game rendering and logic.
 
+The game can be played [on Itch.io here](https://phonaputer.itch.io/invaders-ts).
+
 ### Motivation
 
 I wrote this for three reasons.
