@@ -17,10 +17,10 @@ const newCrab = (args: NewInvaderArgs): void => {
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);
-  CollisionPassive.hitboxOffsetX[entity] = 2;
-  CollisionPassive.hitboxOffsetY[entity] = 2;
+  CollisionPassive.hitboxOffsetX[entity] = 3;
+  CollisionPassive.hitboxOffsetY[entity] = 4;
   CollisionPassive.hitboxW[entity] = 10;
-  CollisionPassive.hitboxH[entity] = 9;
+  CollisionPassive.hitboxH[entity] = 7;
 };
 
 export default newCrab;

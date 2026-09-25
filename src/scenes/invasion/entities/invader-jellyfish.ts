@@ -17,8 +17,8 @@ const newJellyfish = (args: NewInvaderArgs): void => {
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);
-  CollisionPassive.hitboxOffsetX[entity] = 1;
-  CollisionPassive.hitboxOffsetY[entity] = 3;
+  CollisionPassive.hitboxOffsetX[entity] = 2;
+  CollisionPassive.hitboxOffsetY[entity] = 4;
   CollisionPassive.hitboxW[entity] = 12;
   CollisionPassive.hitboxH[entity] = 8;
 };

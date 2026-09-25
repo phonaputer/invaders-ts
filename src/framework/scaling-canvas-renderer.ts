@@ -45,6 +45,13 @@ export default class ScalingCanvasRenderer {
     this.ctx.stroke();
   }
 
+  drawRect(x: number, y: number, w: number, h: number, color: string, widthPx: number): void {
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = widthPx;
+
+    this.ctx.strokeRect(x * this.scaleFactorX, y * this.scaleFactorY, w * this.scaleFactorX, h * this.scaleFactorY);
+  }
+
   clearAll() {
     this.ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }

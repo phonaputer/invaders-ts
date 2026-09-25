@@ -16,8 +16,8 @@ const newOctopus = (args: NewInvaderArgs): void => {
 
   addComponent(args.ctx.world, entity, CollisionPassive);
   CollisionPassive.hitboxOffsetX[entity] = 0;
-  CollisionPassive.hitboxOffsetY[entity] = 3;
-  CollisionPassive.hitboxW[entity] = 14;
+  CollisionPassive.hitboxOffsetY[entity] = 4;
+  CollisionPassive.hitboxW[entity] = 16;
   CollisionPassive.hitboxH[entity] = 8;
 
   // TODO deletion callback

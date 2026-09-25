@@ -15,6 +15,8 @@ export interface AssetUnawareRenderer {
 
   drawLine: (startX: number, startY: number, endX: number, endY: number, color: string, widthPx: number) => void;
 
+  drawRect: (x: number, y: number, w: number, h: number, color: string, widthPx: number) => void;
+
   clearAll: () => void;
 }
 
@@ -46,6 +48,10 @@ export default class AssetAwareRenderer {
 
   drawLine(startX: number, startY: number, endX: number, endY: number, color: string, widthPx: number): void {
     this.renderer.drawLine(startX, startY, endX, endY, color, widthPx);
+  }
+
+  drawRect(x: number, y: number, w: number, h: number, color: string, widthPx: number): void {
+    this.renderer.drawRect(x, y, w, h, color, widthPx);
   }
 
   clearAll() {

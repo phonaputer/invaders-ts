@@ -13,5 +13,7 @@ export default interface Renderer {
 
   drawLine: (startX: number, startY: number, endX: number, endY: number, color: string, widthPx: number) => void;
 
+  drawRect: (x: number, y: number, w: number, h: number, color: string, widthPx: number) => void;
+
   clearAll: () => void;
 }

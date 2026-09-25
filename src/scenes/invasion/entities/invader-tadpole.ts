@@ -17,8 +17,8 @@ const newTadpole = (args: NewInvaderArgs): void => {
   });
 
   addComponent(args.ctx.world, entity, CollisionPassive);
-  CollisionPassive.hitboxOffsetX[entity] = 4;
-  CollisionPassive.hitboxOffsetY[entity] = 2;
+  CollisionPassive.hitboxOffsetX[entity] = 5;
+  CollisionPassive.hitboxOffsetY[entity] = 3;
   CollisionPassive.hitboxW[entity] = 5;
   CollisionPassive.hitboxH[entity] = 9;
 };
