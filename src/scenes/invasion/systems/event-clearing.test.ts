@@ -13,10 +13,7 @@ interface EventClearingSystemTestSetup {
   system: EventClearingSystem;
 }
 
-const setupTest = (
-  tickEvents: Array<ComponentRef>,
-  renderEvents: Array<ComponentRef>,
-): EventClearingSystemTestSetup => {
+const setupTest = (tickEvents: ComponentRef[], renderEvents: ComponentRef[]): EventClearingSystemTestSetup => {
   const world = createWorld();
 
   return {
@@ -30,7 +27,7 @@ const setupTest = (
         initiated: vi.fn(),
         held: vi.fn(),
       },
-      world: world,
+      world,
     },
     renderCtx: {
       assetGetter: {
@@ -40,9 +37,10 @@ const setupTest = (
       renderer: {
         drawImage: vi.fn(),
         drawLine: vi.fn(),
+        drawRect: vi.fn(),
         clearAll: vi.fn(),
       },
-      world: world,
+      world,
     },
     system: new EventClearingSystem({ tickEvents, renderEvents }),
   };

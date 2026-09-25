@@ -19,6 +19,7 @@ const setupTest = (): SpriteRenderingSystemTestSetup => ({
     renderer: {
       drawImage: vi.fn(),
       drawLine: vi.fn(),
+      drawRect: vi.fn(),
       clearAll: vi.fn(),
     },
     world: createWorld(),

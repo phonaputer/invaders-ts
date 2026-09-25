@@ -3,8 +3,8 @@ import type { TickCtx } from "@src/framework/tick-system";
 import { query, removeEntity, type ComponentRef } from "bitecs";
 
 interface EventClearingSystemArgs {
-  tickEvents: Array<ComponentRef>;
-  renderEvents: Array<ComponentRef>;
+  tickEvents: ComponentRef[];
+  renderEvents: ComponentRef[];
 }
 
 export default class EventClearingSystem {

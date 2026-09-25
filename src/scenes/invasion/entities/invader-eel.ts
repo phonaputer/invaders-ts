@@ -64,21 +64,21 @@ const onDamage = (ctx: TickCtx, entity: EntityId): void => {
   addComponent(ctx.world, audioEntity, AudioStarted);
   AudioStarted.id[audioEntity] = ALIEN_EXPLOSION_AUDIO;
 
-  for (const entity of query(ctx.world, [PlayerAttack])) {
-    grantFastWeapon(ctx, entity);
+  for (const player of query(ctx.world, [PlayerAttack])) {
+    grantFastWeapon(ctx, player);
 
     const callbackEntity = addEntity(ctx.world);
     addComponent(ctx.world, callbackEntity, CallbackOnTimeout);
-    CallbackOnTimeout.callback[callbackEntity] = removeBonusWeapon(entity);
+    CallbackOnTimeout.callback[callbackEntity] = removeBonusWeapon(player);
     CallbackOnTimeout.callbackMs[callbackEntity] = ctx.currentMs + BONUS_WEAPON_MS;
   }
 };
 
-const removeBonusWeapon = (entity: EntityId): ((ctx: TickCtx) => void) => {
-  return (ctx: TickCtx): void => {
+const removeBonusWeapon =
+  (entity: EntityId): ((ctx: TickCtx) => void) =>
+  (ctx: TickCtx): void => {
     grantStandardWeapon(ctx, entity);
   };
-};
 
 const newEel = (ctx: NewEelContext): EntityId => {
   let xVelocity = 0.5;

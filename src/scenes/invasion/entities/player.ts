@@ -42,8 +42,8 @@ const newPlayer = (ctx: NewPlayerContext): void => {
   grantStandardWeapon(ctx, entity);
 
   addComponent(ctx.world, entity, PlayerMovement);
-  PlayerMovement.nextFrameMs[entity] = ctx.currentMs + 66;
-  PlayerMovement.msPerFrame[entity] = 66;
+  PlayerMovement.nextFrameMs[entity] = ctx.currentMs + 95;
+  PlayerMovement.msPerFrame[entity] = 95;
   PlayerMovement.currentFrame[entity] = 0;
   PlayerMovement.strip[entity] = [
     { x: 0, y: 2 },
